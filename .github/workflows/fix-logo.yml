@@ -18,16 +18,16 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Apply surgical CSS fix
+      - name: Apply logo markup
         shell: bash
-        run: |
-          python -c "from pathlib import Path; p=Path('index.html'); s=p.read_text(encoding='utf-8'); old='.logo{font-weight:900;letter-spacing:-.06em;font-size:24px}.logo span{color:var(--lime)}'; new='.logo{display:inline-flex;align-items:baseline;font-weight:900;font-size:24px;letter-spacing:-.035em;line-height:1;white-space:nowrap}.logo span{color:var(--lime);display:inline-block;margin-left:.02em}'; assert old in s, 'Expected logo CSS was not found'; p.write_text(s.replace(old,new,1),encoding='utf-8')"
+        run: python -c "from pathlib import Path; p=Path('index.html'); s=p.read_text(encoding='utf-8'); old='<a class=\"logo\" href=\"#top\" aria-label=\"BET, CHEGA.\">BET<span>,</span> CHEGA<span>.</span></a>'; new='<a class=\"logo\" href=\"#top\" aria-label=\"BET, CHEGA.\">BET<span>,</span><span class=\"logo-word\">CHEGA</span><span>.</span></a>'; assert old in s, 'Logo markup not found'; p.write_text(s.replace(old,new,1),encoding='utf-8')"
 
       - name: Commit and push
+        shell: bash
         run: |
           git config user.name "BET, CHEGA. Bot"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add index.html
           git diff --cached --quiet && exit 0
-          git commit -m "fix: alinhar logo BET, CHEGA."
+          git commit -m "fix: unir logo BET,CHEGA."
           git push
