@@ -2,6 +2,8 @@ name: Fix logo alignment
 
 on:
   push:
+    branches:
+      - main
     paths:
       - '.github/workflows/fix-logo.yml'
   workflow_dispatch:
@@ -11,23 +13,16 @@ permissions:
 
 jobs:
   fix-logo:
-    if: github.event_name == 'workflow_dispatch' || github.event.head_commit.message != 'fix: alinhar logo BET, CHEGA.'
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+
       - name: Apply surgical CSS fix
+        shell: bash
         run: |
-          python - <<'PY'
-          from pathlib import Path
-          p = Path('index.html')
-          s = p.read_text(encoding='utf-8')
-          old = '.logo{font-weight:900;letter-spacing:-.06em;font-size:24px}.logo span{color:var(--lime)}'
-          new = '.logo{display:inline-flex;align-items:baseline;font-weight:900;font-size:24px;letter-spacing:-.035em;line-height:1;white-space:nowrap}.logo span{color:var(--lime);display:inline-block;margin-left:.02em}'
-          if old not in s:
-              raise SystemExit('Expected logo CSS was not found; aborting without changes.')
-          p.write_text(s.replace(old, new, 1), encoding='utf-8')
-          PY
+          python -c "from pathlib import Path; p=Path('index.html'); s=p.read_text(encoding='utf-8'); old='.logo{font-weight:900;letter-spacing:-.06em;font-size:24px}.logo span{color:var(--lime)}'; new='.logo{display:inline-flex;align-items:baseline;font-weight:900;font-size:24px;letter-spacing:-.035em;line-height:1;white-space:nowrap}.logo span{color:var(--lime);display:inline-block;margin-left:.02em}'; assert old in s, 'Expected logo CSS was not found'; p.write_text(s.replace(old,new,1),encoding='utf-8')"
+
       - name: Commit and push
         run: |
           git config user.name "BET, CHEGA. Bot"
@@ -35,10 +30,4 @@ jobs:
           git add index.html
           git diff --cached --quiet && exit 0
           git commit -m "fix: alinhar logo BET, CHEGA."
-          git push
-      - name: Remove one-shot workflow
-        if: success()
-        run: |
-          git rm .github/workflows/fix-logo.yml
-          git commit -m "chore: remover workflow temporario de ajuste da logo"
           git push
