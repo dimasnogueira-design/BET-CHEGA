@@ -1,301 +1,260 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="pt-BR">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="theme-color" content="#0B0C0E" />
-  <meta name="description" content="BET, CHEGA. — infraestrutura independente de saída das apostas." />
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#0B0C0E">
+  <meta name="description" content="BET, CHEGA. — uma porta de saída das apostas, sem julgamento e sem promessa de recuperar perdas.">
   <title>BET, CHEGA. — A porta de saída das apostas</title>
   <style>
-    :root{--carbon:#0b0c0e;--graphite:#15181d;--graphite-2:#101216;--line:#292d34;--text:#f4f5f6;--muted:#9da2aa;--lime:#10f56a;--danger:#ff5b5b;--max:1180px}
+    :root{
+      --bg:#0B0C0E;--panel:#14171B;--panel2:#191C21;--line:#292E36;
+      --text:#F4F5F6;--muted:#A4A9B1;--lime:#10F56A;--danger:#FF5B5B;
+      --max:1160px;--radius:22px;
+    }
     *{box-sizing:border-box}
-    html{scroll-behavior:smooth;scroll-padding-top:88px}
-    body{margin:0;background:var(--carbon);color:var(--text);font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;line-height:1.5;-webkit-font-smoothing:antialiased}
-    body:before{content:"";position:fixed;inset:0;pointer-events:none;background:radial-gradient(circle at 82% 18%,rgba(16,245,106,.045),transparent 28%);z-index:-1}
-    a{color:inherit;text-decoration:none}button,a{font:inherit}
-    .wrap{width:min(var(--max),calc(100% - 40px));margin:auto}
+    html{scroll-behavior:smooth;scroll-padding-top:76px}
+    body{margin:0;background:var(--bg);color:var(--text);font-family:Inter,-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif;line-height:1.5;-webkit-font-smoothing:antialiased}
+    body.locked{overflow:hidden}
+    a{color:inherit;text-decoration:none}button{font:inherit}
+    img{max-width:100%}
+    .wrap{width:min(var(--max),calc(100% - 32px));margin:auto}
 
-    header{position:sticky;top:0;z-index:50;background:rgba(11,12,14,.9);backdrop-filter:blur(18px);border-bottom:1px solid rgba(255,255,255,.07)}
-    .nav{height:72px;display:flex;align-items:center;justify-content:space-between}
-    .logo{display:inline-flex;align-items:baseline;font-weight:950;font-size:25px;letter-spacing:-.055em;line-height:1;white-space:nowrap}
-    .logo span{color:var(--lime);display:inline;margin:0}
-    .navlinks{display:flex;gap:22px;align-items:center;color:var(--muted);font-size:14px}
-    .navlinks a:not(.emergency):hover{color:var(--text)}
-    .emergency{color:var(--text);border:1px solid rgba(255,91,91,.42);padding:9px 13px;border-radius:999px;font-weight:850}
-    .emergency:hover{color:#fff;border-color:var(--danger)}
+    header{position:fixed;top:0;left:0;right:0;z-index:50;background:linear-gradient(180deg,rgba(11,12,14,.94),rgba(11,12,14,.64),transparent);pointer-events:none}
+    .nav{height:76px;display:flex;align-items:center;justify-content:space-between;pointer-events:auto}
+    .logo{display:inline-block;font-size:25px;line-height:1;font-weight:950;letter-spacing:-.07em;white-space:nowrap}
+    .logo .comma{color:var(--lime)}
+    .nav-right{display:flex;align-items:center;gap:10px}
+    .nav-link{font-size:12px;font-weight:900;letter-spacing:.08em;color:#D9DCE0;padding:10px 12px}
+    .nav-emergency{border:1px solid rgba(255,91,91,.5);border-radius:999px;color:#fff}
 
-    main{overflow:hidden}
-    .hero{min-height:calc(100svh - 72px);display:flex;align-items:center;padding:48px 0 54px;position:relative}
-    .hero:after{content:"";position:absolute;width:520px;height:520px;border-radius:50%;background:rgba(16,245,106,.035);filter:blur(100px);right:-260px;top:12%;pointer-events:none}
-    .hero-grid{display:grid;grid-template-columns:minmax(0,1.08fr) minmax(330px,.72fr);align-items:center;gap:54px;position:relative;z-index:2}
-    .hero-copy{position:relative;z-index:3}
-    .eyebrow{font-size:11px;letter-spacing:.17em;color:var(--lime);font-weight:900;margin-bottom:20px;text-transform:uppercase}
-    .hero h1{font-size:clamp(45px,6.3vw,82px);line-height:.93;letter-spacing:-.072em;max-width:820px;margin:0 0 25px;font-weight:950}
-    .hero h1 strong{display:block;color:var(--lime)}
-    .hero p{font-size:clamp(17px,1.7vw,21px);color:var(--muted);max-width:650px;margin:0 0 30px}
-    .actions{display:flex;gap:12px;flex-wrap:wrap}
-    .btn{display:inline-flex;align-items:center;justify-content:center;min-height:55px;padding:0 23px;border-radius:11px;border:1px solid var(--line);font-weight:900;cursor:pointer;transition:transform .18s ease,border-color .18s ease,filter .18s ease,background .18s ease}
-    .primary{background:var(--lime);color:#06120a;border-color:var(--lime);box-shadow:0 0 30px rgba(16,245,106,.15)}
-    .primary:hover{transform:translateY(-2px);filter:brightness(1.05)}
-    .secondary{background:var(--graphite);color:var(--text)}
-    .secondary:hover{border-color:#555a63;background:#1b1e24}
-    .note{font-size:12px;color:#777d86;margin-top:13px}
+    .hero{position:relative;min-height:100svh;display:flex;align-items:center;overflow:hidden;padding:96px 0 44px}
+    .hero-bg{position:absolute;inset:0;background-image:linear-gradient(90deg,rgba(11,12,14,.98) 0%,rgba(11,12,14,.9) 38%,rgba(11,12,14,.48) 68%,rgba(11,12,14,.72) 100%),url('image.png');background-size:cover;background-position:center 34%;filter:saturate(.72)}
+    .hero-bg:after{content:"";position:absolute;inset:0;background:linear-gradient(0deg,var(--bg) 0%,transparent 24%,rgba(11,12,14,.1) 70%,var(--bg) 100%)}
+    .hero-content{position:relative;z-index:2;width:100%}
+    .hero-copy{max-width:700px}
+    .eyebrow{display:inline-flex;align-items:center;gap:8px;color:var(--lime);font-size:11px;font-weight:950;letter-spacing:.16em;text-transform:uppercase;margin-bottom:22px}
+    .eyebrow:before{content:"";width:22px;height:2px;background:var(--lime)}
+    h1{font-size:clamp(46px,7vw,82px);line-height:.91;letter-spacing:-.075em;margin:0;font-weight:950}
+    h1 strong{display:block;color:var(--lime)}
+    .hero-sub{max-width:590px;color:#D0D4D9;font-size:clamp(16px,2vw,20px);margin:24px 0 28px}
+    .actions{display:flex;flex-wrap:wrap;gap:10px}
+    .btn{min-height:56px;display:inline-flex;align-items:center;justify-content:center;padding:0 22px;border-radius:13px;border:1px solid var(--line);font-weight:950;font-size:13px;letter-spacing:.03em;cursor:pointer;transition:transform .18s ease,border-color .18s ease,filter .18s ease}
+    .btn:hover{transform:translateY(-2px)}
+    .primary{background:var(--lime);color:#06120A;border-color:var(--lime);box-shadow:0 10px 38px rgba(16,245,106,.16)}
+    .secondary{background:rgba(20,23,27,.76);color:#fff;backdrop-filter:blur(12px)}
+    .hero-note{font-size:12px;color:#8F959E;margin-top:13px}
+    .hero-scroll{position:absolute;bottom:22px;left:50%;transform:translateX(-50%);font-size:10px;color:#7D838C;letter-spacing:.16em;text-transform:uppercase}
 
-    .hero-visual{position:relative;display:flex;justify-content:center;align-items:flex-end;min-height:510px}
-    .hero-visual:before{content:"";position:absolute;inset:7% 6% 3%;background:linear-gradient(145deg,rgba(16,245,106,.08),transparent 40%,rgba(255,255,255,.025));border:1px solid rgba(255,255,255,.055);border-radius:28px;transform:rotate(2deg);pointer-events:none}
-    .hero-photo{position:relative;width:min(100%,420px);height:555px;object-fit:cover;object-position:center top;border-radius:24px 24px 8px 8px;display:block;filter:contrast(1.08) brightness(.9);-webkit-mask-image:linear-gradient(to bottom,transparent 0%,#000 8%,#000 82%,transparent 100%);mask-image:linear-gradient(to bottom,transparent 0%,#000 8%,#000 82%,transparent 100%)}
-    .photo-glow{position:absolute;width:280px;height:280px;background:rgba(16,245,106,.075);filter:blur(75px);right:4%;bottom:2%;pointer-events:none}
-    .photo-caption{position:absolute;bottom:23px;right:-4px;max-width:245px;padding:13px 15px;border:1px solid rgba(255,255,255,.1);background:rgba(11,12,14,.78);backdrop-filter:blur(12px);border-radius:12px;color:#c2c6cc;font-size:12px;line-height:1.4;box-shadow:0 14px 40px rgba(0,0,0,.28)}
-    .hero-tag{position:absolute;left:-8px;bottom:40px;padding:9px 12px;border:1px solid rgba(16,245,106,.2);background:rgba(11,12,14,.82);backdrop-filter:blur(12px);border-radius:999px;color:var(--lime);font-size:10px;font-weight:900;letter-spacing:.11em}
+    section{padding:92px 0;border-top:1px solid rgba(255,255,255,.065)}
+    .section-head{max-width:760px;margin-bottom:36px}
+    .kicker{color:var(--lime);font-size:11px;font-weight:950;letter-spacing:.16em;text-transform:uppercase}
+    h2{font-size:clamp(34px,5vw,60px);line-height:.98;letter-spacing:-.06em;margin:10px 0 16px;font-weight:950}
+    .section-head p{margin:0;color:var(--muted);font-size:18px}
 
-    section{padding:88px 0;border-top:1px solid rgba(255,255,255,.06)}
-    .sectionhead{max-width:760px;margin-bottom:38px}.sectionhead .kicker{color:var(--lime);font-size:11px;font-weight:900;letter-spacing:.15em}.sectionhead h2{font-size:clamp(32px,4.8vw,58px);line-height:1;letter-spacing:-.055em;margin:10px 0 16px;font-weight:900}.sectionhead p{color:var(--muted);font-size:18px;margin:0}
+    .paths{display:grid;grid-template-columns:repeat(2,1fr);gap:12px}
+    .path{display:flex;min-height:170px;flex-direction:column;padding:24px;background:var(--panel);border:1px solid var(--line);border-radius:18px}
+    .path:hover{border-color:#505660}
+    .path-num{color:var(--lime);font-size:10px;font-weight:950;letter-spacing:.12em}
+    .path h3{font-size:22px;line-height:1.05;margin:10px 0 8px}
+    .path p{margin:0;color:var(--muted);font-size:14px}
+    .path-link{margin-top:auto;padding-top:18px;color:var(--lime);font-size:11px;font-weight:950;letter-spacing:.08em}
 
-    .choices{display:grid;grid-template-columns:repeat(2,1fr);gap:14px}.choice{display:flex;flex-direction:column;background:var(--graphite);border:1px solid var(--line);border-radius:16px;padding:24px;min-height:160px;transition:transform .2s ease,border-color .2s ease,background .2s ease}.choice:hover{border-color:#50555e;transform:translateY(-2px);background:#191c21}.choice .num{font-size:11px;color:var(--lime);font-weight:900;letter-spacing:.06em}.choice h3{font-size:21px;line-height:1.1;margin:8px 0}.choice p{color:var(--muted);margin:0;max-width:600px}.choice span{display:inline-block;margin-top:auto;padding-top:18px;color:var(--lime);font-size:12px;font-weight:900}
+    .journey{display:grid;grid-template-columns:repeat(6,1fr);border:1px solid var(--line);border-radius:18px;overflow:hidden}
+    .step{min-height:145px;padding:22px 16px;background:var(--panel);border-right:1px solid var(--line)}
+    .step:last-child{border-right:0}.step b{color:var(--lime);font-size:10px;letter-spacing:.12em}.step strong{display:block;font-size:18px;margin-top:10px}.step p{color:var(--muted);font-size:13px;margin:6px 0 0}
 
-    .journey{display:grid;grid-template-columns:repeat(6,1fr);border:1px solid var(--line);border-radius:16px;overflow:hidden}.step{padding:23px 17px;background:var(--graphite);border-right:1px solid var(--line);min-height:145px}.step:last-child{border-right:0}.step b{display:block;font-size:11px;color:var(--lime);letter-spacing:.1em;margin-bottom:11px}.step strong{font-size:19px}.step p{font-size:13px;color:var(--muted);margin:7px 0 0}
+    .split{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+    .card{background:var(--panel);border:1px solid var(--line);border-radius:20px;padding:30px}
+    .card h3{font-size:28px;line-height:1;margin:0 0 12px}.card p{color:var(--muted);margin:0 0 20px}.card ul{padding:0;margin:0;list-style:none}.card li{padding:11px 0;border-top:1px solid rgba(255,255,255,.07);font-size:14px}.card li:before{content:"✓";color:var(--lime);font-weight:950;margin-right:10px}
+    .statement{border:1px solid var(--line);background:linear-gradient(135deg,#15181D,#101215);border-radius:22px;padding:38px}.statement p{font-size:clamp(28px,4.5vw,52px);line-height:1.02;letter-spacing:-.045em;font-weight:950;margin:0}.statement strong{color:var(--lime)}
+    .crisis{border-color:rgba(255,91,91,.3)}.crisis .kicker{color:var(--danger)}
+    footer{border-top:1px solid var(--line);padding:38px 0 55px;color:#80868F;font-size:12px}.footer-row{display:flex;justify-content:space-between;gap:18px;flex-wrap:wrap}.lime{color:var(--lime)}
 
-    .statement{background:var(--graphite);border:1px solid var(--line);border-radius:20px;padding:42px}.statement blockquote{margin:0;font-size:clamp(27px,4vw,48px);font-weight:900;line-height:1.04;letter-spacing:-.04em}.statement cite{display:block;color:var(--muted);margin-top:20px;font-style:normal}
-    .talk{display:grid;grid-template-columns:1fr 1fr;gap:16px}.talkbox{border:1px solid var(--line);background:var(--graphite);border-radius:18px;padding:30px}.talkbox h3{font-size:28px;margin:0 0 10px}.talkbox p{color:var(--muted);margin:0 0 22px}
-    .crisis{border-color:rgba(255,91,91,.22)}
-    footer{border-top:1px solid var(--line);padding:40px 0 55px;color:var(--muted);font-size:13px}.footerline{display:flex;justify-content:space-between;gap:20px;flex-wrap:wrap}.lime{color:var(--lime)}
+    /* MODO IMPULSO */
+    .impulse-overlay{position:fixed;inset:0;z-index:100;background:rgba(5,6,8,.96);display:none;align-items:center;justify-content:center;padding:14px;overflow:auto}
+    .impulse-overlay.open{display:flex}
+    .impulse-panel{position:relative;width:min(900px,100%);max-height:calc(100svh - 28px);overflow:auto;background:var(--bg);border:1px solid #30353D;border-radius:24px;box-shadow:0 30px 100px rgba(0,0,0,.72);padding:30px}
+    .impulse-close{position:absolute;top:14px;right:14px;width:38px;height:38px;border:1px solid var(--line);border-radius:50%;background:var(--panel);color:#fff;cursor:pointer}
+    .impulse-kicker{color:var(--lime);font-size:10px;font-weight:950;letter-spacing:.16em;margin-bottom:12px}
+    .impulse-grid{display:grid;grid-template-columns:1fr 1fr;align-items:center;gap:30px}
+    .impulse-image{width:100%;max-height:500px;object-fit:contain;display:block}
+    .impulse-copy h2{font-size:clamp(38px,6vw,62px);margin:0 0 14px}.impulse-copy h2 strong{display:block;color:var(--lime)}
+    .impulse-copy p{color:var(--muted);font-size:16px;margin:0 0 18px}.impulse-copy p strong{color:var(--text)}
+    .timer{font-variant-numeric:tabular-nums;font-size:72px;line-height:1;font-weight:950;letter-spacing:-.07em;margin:18px 0}.impulse-status{font-size:13px;color:#C6CBD1;min-height:40px}
+    .start-wrap{margin-top:18px}.start-wrap .btn{width:100%}
+    .speak{margin-top:26px;padding-top:22px;border-top:1px solid var(--line)}.speak[hidden]{display:none}.speak-title{font-size:12px;font-weight:950;letter-spacing:.12em;margin-bottom:12px}
+    .options{display:grid;grid-template-columns:1fr 1fr;gap:9px}.option{padding:14px;border-radius:12px;border:1px solid var(--line);background:var(--panel);color:#fff;text-align:left;font-weight:800;cursor:pointer}.option.selected{border-color:var(--lime);background:#111C15}
+    .response{display:none;margin-top:14px;padding:17px;border:1px solid rgba(16,245,106,.25);border-radius:14px;background:rgba(16,245,106,.045)}.response.show{display:block}.response strong{display:block;font-size:17px;margin-bottom:7px}.response span{color:#B9BEC5;font-size:14px}.response-actions{display:flex;gap:9px;flex-wrap:wrap;margin-top:16px}.response-actions .btn{min-height:48px}
 
     @media(max-width:850px){
-      .wrap{width:min(var(--max),calc(100% - 28px))}
-      .navlinks a:not(.emergency){display:none}
-      .hero{padding:38px 0 48px;min-height:auto}
-      .hero-grid{grid-template-columns:1fr;gap:22px}
-      .hero h1{font-size:clamp(45px,12vw,70px)}
-      .hero p{font-size:17px}
-      .hero-visual{min-height:370px;order:2}
-      .hero-photo{height:455px;width:min(100%,365px)}
-      .hero-visual:before{inset:5% 4% 2%}
-      .hero-tag{left:4%;bottom:28px}
-      .photo-caption{right:2%;bottom:18px}
-      .choices,.talk{grid-template-columns:1fr}
-      .journey{grid-template-columns:1fr 1fr}
-      .step{border-right:0;border-bottom:1px solid var(--line)}
-      .step:nth-child(odd){border-right:1px solid var(--line)}
-      .step:nth-last-child(-n+2){border-bottom:0}
-      .statement{padding:28px}
+      .wrap{width:min(var(--max),calc(100% - 24px))}
+      .nav{height:68px}.nav-link{display:none}.nav-emergency{display:inline-flex}
+      .hero{min-height:100svh;padding:86px 0 48px;align-items:flex-end}
+      .hero-bg{background-image:linear-gradient(180deg,rgba(11,12,14,.38) 0%,rgba(11,12,14,.18) 26%,rgba(11,12,14,.78) 58%,rgba(11,12,14,.98) 91%),url('image.png');background-position:center center;background-size:cover}
+      .hero-bg:after{background:linear-gradient(0deg,var(--bg) 0%,transparent 17%,transparent 75%,var(--bg) 100%)}
+      .hero-content{padding-bottom:18px}.hero-copy{max-width:none;text-align:center}.eyebrow{margin-bottom:15px}.eyebrow:before{display:none}
+      h1{font-size:clamp(44px,12.5vw,70px);line-height:.91}.hero-sub{font-size:16px;margin:18px auto 22px;max-width:470px}.actions{display:block}.actions .btn{width:100%;margin-bottom:9px}.hero-note{margin-top:4px}.hero-scroll{display:none}
+      section{padding:72px 0}.paths,.split{grid-template-columns:1fr}.journey{grid-template-columns:1fr 1fr}.step{border-right:0;border-bottom:1px solid var(--line)}.step:nth-child(odd){border-right:1px solid var(--line)}.step:nth-last-child(-n+2){border-bottom:0}
+      .statement{padding:28px}.card{padding:24px}
+      .impulse-panel{padding:22px 16px 18px;border-radius:20px}.impulse-grid{grid-template-columns:1fr;gap:8px}.impulse-image{max-height:300px}.impulse-copy{text-align:center}.impulse-copy h2{font-size:42px}.timer{text-align:center;font-size:62px}.impulse-status{min-height:0}.start-wrap{margin-top:12px}.options{grid-template-columns:1fr}.response-actions{display:block}.response-actions .btn{width:100%;margin-bottom:8px}
     }
-    @media(max-width:480px){
-      .nav{height:64px}
-      .logo{font-size:22px;transform:translateY(1px)}
-      .hero{padding-top:31px}
-      .hero h1{font-size:clamp(43px,13vw,65px)}
-      .hero p{font-size:16px}
-      .actions .btn{width:100%}
-      .hero-visual{min-height:325px}
-      .hero-photo{height:405px}
-      .hero-tag{bottom:23px;font-size:9px}
-      .photo-caption{position:relative;right:auto;bottom:auto;margin:-73px auto 0;z-index:3;max-width:270px}
-      .journey{grid-template-columns:1fr}
-      .step,.step:nth-child(odd){border-right:0;border-bottom:1px solid var(--line)}
-      .step:last-child{border-bottom:0}
-      section{padding:72px 0}
+    @media(max-width:430px){
+      .logo{font-size:22px}.nav{height:62px}.nav-emergency{font-size:10px;padding:8px 10px}
+      .hero{padding-top:76px}.hero-bg{background-position:center 42%}.hero-content{padding-bottom:4px}.eyebrow{font-size:9px}.hero-sub{font-size:15px;margin-top:16px}.hero-note{font-size:11px}
+      h1{font-size:clamp(42px,12.8vw,57px)}.btn{min-height:54px;font-size:12px}
+      .journey{grid-template-columns:1fr}.step,.step:nth-child(odd){border-right:0;border-bottom:1px solid var(--line)}.step:last-child{border-bottom:0}
+      .impulse-image{max-height:245px}.impulse-copy h2{font-size:36px}.impulse-panel{max-height:calc(100svh - 18px);padding:20px 14px 15px}.impulse-close{top:9px;right:9px}
     }
-    @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}.btn,.choice{transition:none}}
-  
-.impulse-overlay{position:fixed;inset:0;z-index:100;background:rgba(5,6,8,.94);backdrop-filter:blur(18px);display:none;align-items:center;justify-content:center;padding:20px}
-.impulse-overlay.is-open{display:flex}
-.impulse-panel{width:min(760px,100%);max-height:94svh;overflow:auto;background:#0B0C0E;border:1px solid #30353d;border-radius:22px;box-shadow:0 30px 100px rgba(0,0,0,.65);padding:34px}
-.impulse-kicker{color:var(--lime);font-size:11px;font-weight:950;letter-spacing:.16em;margin-bottom:12px}
-.impulse-panel h2{font-size:clamp(34px,6vw,58px);line-height:.95;letter-spacing:-.055em;margin:0 0 14px;font-weight:950}
-.impulse-panel h2 strong{color:var(--lime);display:block}
-.impulse-panel p{color:var(--muted);font-size:16px;margin:0 0 22px}
-.impulse-breathing{display:grid;grid-template-columns:minmax(220px, .9fr) minmax(260px,1.1fr);gap:28px;align-items:center;margin:10px 0 8px}
-.impulse-breathing img{width:100%;max-height:360px;object-fit:contain;display:block;border-radius:18px}
-.impulse-breathing-copy{padding-right:8px}
-.impulse-breathing-copy h3{font-size:clamp(28px,5vw,46px);line-height:.98;letter-spacing:-.05em;margin:0 0 12px;font-weight:950}
-.impulse-breathing-copy h3 strong{display:block;color:var(--lime)}
-.impulse-breathing-copy p{margin-bottom:18px}
-.impulse-timer{font-variant-numeric:tabular-nums;font-size:72px;line-height:1;font-weight:950;letter-spacing:-.06em;margin:16px 0;text-align:left}
-.impulse-status{color:#c7cbd1;font-size:13px;min-height:40px}
-.impulse-options{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:20px}
-.impulse-option{border:1px solid var(--line);background:#171a20;color:var(--text);border-radius:12px;padding:15px;text-align:left;font-weight:800;cursor:pointer}
-.impulse-option:hover,.impulse-option.is-selected{border-color:var(--lime);background:#151d18}
-.impulse-response{display:none;margin-top:20px;padding:18px;border:1px solid rgba(16,245,106,.2);background:rgba(16,245,106,.045);border-radius:14px}
-.impulse-response.is-visible{display:block}
-.impulse-response strong{display:block;font-size:18px;margin-bottom:7px}
-.impulse-actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:18px}
-.impulse-actions .btn{min-height:48px}
-.impulse-close{display:block;margin:18px auto 0;background:none;border:0;color:#777d86;font-size:12px;cursor:pointer;padding:8px}
-@media(max-width:700px){.impulse-breathing{grid-template-columns:1fr;gap:8px}.impulse-breathing img{max-height:270px}.impulse-breathing-copy{padding:0}.impulse-timer{text-align:center;font-size:64px}.impulse-panel{padding:24px;border-radius:18px}}
-@media(max-width:560px){.impulse-options{grid-template-columns:1fr}}
-
-</style>
+    @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}.btn{transition:none}}
+  </style>
 </head>
 <body>
   <header>
     <div class="wrap nav">
-      <a class="logo" href="#top" aria-label="BET, CHEGA.">BET, CHEGA.</a>
-      <nav class="navlinks" aria-label="Navegação principal">
-        <a href="#jornada">Jornada</a>
-        <a href="#como">Como funciona</a>
-        <a class="emergency" href="#crise">EMERGÊNCIA</a>
-      </nav>
+      <a class="logo" href="#top" aria-label="BET, CHEGA.">BET<span class="comma">,</span> CHEGA.</a>
+      <div class="nav-right"><a class="nav-link" href="#jornada">JORNADA</a><a class="nav-link" href="#entender">ENTENDER</a><a class="nav-link nav-emergency" href="#crise">EMERGÊNCIA</a></div>
     </div>
   </header>
 
   <main id="top">
     <section class="hero" aria-labelledby="hero-title">
-      <div class="wrap hero-grid">
+      <div class="hero-bg" aria-hidden="true"></div>
+      <div class="wrap hero-content">
         <div class="hero-copy">
-          <div class="eyebrow">INFRAESTRUTURA DE SAÍDA DAS APOSTAS</div>
+          <div class="eyebrow">UMA PORTA DE SAÍDA</div>
           <h1 id="hero-title">Você não precisa recuperar o dinheiro.<strong>PRECISA RECUPERAR A SUA VIDA.</strong></h1>
-          <p>O BET, CHEGA. ajuda você a interromper o ciclo, criar proteção e atravessar o que vem depois — sem julgamento e sem prometer milagres.</p>
+          <p class="hero-sub">Se você está pensando em apostar de novo, pare aqui por alguns segundos. A próxima aposta pode esperar.</p>
           <div class="actions">
-            <a class="btn primary" href="#impulso">CHEGA POR HOJE. QUERO RESPIRAR.</a>
+            <a class="btn primary" href="#impulso" data-open-impulse>QUERO PARAR AGORA</a>
             <a class="btn secondary" href="#entender">QUERO ENTENDER</a>
           </div>
-          <div class="note">Privacidade em primeiro lugar. Você decide o que compartilhar.</div>
-        </div>
-
-        <div class="hero-visual" aria-hidden="true">
-          <div class="photo-glow"></div>
-          <img class="hero-photo" src="image.png" alt="" />
-          <div class="hero-tag">PARE · RESPIRE · DECIDA</div>
-          <div class="photo-caption">O momento de parar não precisa esperar amanhã.</div>
+          <div class="hero-note">Sem julgamento. Você decide o que compartilhar.</div>
         </div>
       </div>
+      <div class="hero-scroll">desça quando estiver pronto</div>
     </section>
 
-    <section id="entrar">
+    <section id="entender">
       <div class="wrap">
-        <div class="sectionhead">
-          <div class="kicker">POR ONDE COMEÇAR?</div>
-          <h2>Você não precisa chegar sabendo o que fazer.</h2>
-          <p>Escolha o que mais parece com o que está acontecendo agora. A jornada muda a partir da sua resposta.</p>
-        </div>
-        <div class="choices">
-          <a class="choice" href="#impulso"><div class="num">01 · AGORA</div><h3>Estou com vontade de apostar.</h3><p>Se o impulso está acontecendo neste momento, primeiro vamos criar espaço entre você e a próxima aposta.</p><span>ENTRAR NO FREIO →</span></a>
-          <a class="choice" id="entender" href="#espelho"><div class="num">02 · ESPELHO</div><h3>Quero entender o que está acontecendo.</h3><p>Olhar para o padrão sem colocar um rótulo em você.</p><span>COMEÇAR →</span></a>
-          <a class="choice" href="#parar"><div class="num">03 · DECISÃO</div><h3>Quero parar.</h3><p>Vamos transformar a decisão em proteção concreta, passo a passo.</p><span>PROTEGER →</span></a>
-          <a class="choice" href="#autoexclusao"><div class="num">04 · DEPOIS DA APOSTA</div><h3>Já me autoexcluí.</h3><p>A porta foi fechada. Agora precisamos cuidar do espaço que a aposta ocupava.</p><span>ATRAVESSAR →</span></a>
-          <a class="choice" href="#recaida"><div class="num">05 · ACONTECEU</div><h3>Eu recaí.</h3><p>Sem punição e sem voltar ao zero. Vamos interromper, entender e reforçar a proteção.</p><span>RETOMAR →</span></a>
-          <a class="choice" href="#familia"><div class="num">06 · FAMÍLIA</div><h3>Quero ajudar alguém que amo.</h3><p>Ajudar sem virar polícia, banco ou desaparecer dentro do problema de outra pessoa.</p><span>AJUDAR →</span></a>
-          <a class="choice" href="#dinheiro"><div class="num">07 · DINHEIRO</div><h3>O dinheiro está me pressionando.</h3><p>Conter perdas, proteger o essencial e começar a organizar o que ficou.</p><span>ORGANIZAR →</span></a>
-          <a class="choice" href="#crise"><div class="num">08 · CRISE</div><h3>Estou em uma situação grave.</h3><p>Quando existe risco imediato, a prioridade é segurança e conexão com ajuda real.</p><span>VER SEGURANÇA →</span></a>
+        <div class="section-head"><div class="kicker">COMECE PELO QUE ESTÁ ACONTECENDO AGORA</div><h2>Você não precisa saber qual caminho escolher.</h2><p>O BET, CHEGA. reconhece diferentes momentos e leva você para a próxima ação possível.</p></div>
+        <div class="paths">
+          <a class="path" href="#impulso"><span class="path-num">01 · AGORA</span><h3>Estou com vontade de apostar.</h3><p>Interrompa o impulso antes de tomar a próxima decisão.</p><span class="path-link">ENTRAR NO MODO IMPULSO →</span></a>
+          <a class="path" href="#espelho"><span class="path-num">02 · ENTENDER</span><h3>Quero entender meu padrão.</h3><p>Olhe para o que as apostas estão fazendo na sua vida, sem rótulos.</p><span class="path-link">OLHAR PARA ISSO →</span></a>
+          <a class="path" href="#parar"><span class="path-num">03 · DECIDIR</span><h3>Quero parar.</h3><p>Transforme a decisão em barreiras concretas para acesso, dinheiro e rotina.</p><span class="path-link">COMEÇAR A SAÍDA →</span></a>
+          <a class="path" href="#autoexclusao"><span class="path-num">04 · DEPOIS</span><h3>Já me autoexcluí.</h3><p>A porta foi fechada. Agora começa o trabalho de atravessar o que vem depois.</p><span class="path-link">CONTINUAR →</span></a>
+          <a class="path" href="#recaida"><span class="path-num">05 · RECAÍDA</span><h3>Eu recaí.</h3><p>Sem punição. Primeiro interromper, depois entender onde a barreira falhou.</p><span class="path-link">RETOMAR →</span></a>
+          <a class="path" href="#familia"><span class="path-num">06 · ALGUÉM QUE VOCÊ AMA</span><h3>Quero ajudar alguém.</h3><p>Apoiar sem virar fiscal e sem destruir a própria vida financeira.</p><span class="path-link">ENTENDER COMO →</span></a>
+          <a class="path" href="#dinheiro"><span class="path-num">07 · DINHEIRO</span><h3>O dinheiro está me pressionando.</h3><p>Parar a perda, proteger o essencial e começar a organizar o que ficou.</p><span class="path-link">PROTEGER →</span></a>
+          <a class="path" href="#crise"><span class="path-num">08 · URGENTE</span><h3>Estou em uma situação grave.</h3><p>Em crise, a prioridade é reduzir risco e conectar você a ajuda real.</p><span class="path-link">VER AJUDA →</span></a>
         </div>
       </div>
     </section>
 
     <section id="jornada">
       <div class="wrap">
-        <div class="sectionhead"><div class="kicker">A JORNADA</div><h2>Sair é mais do que parar de abrir um aplicativo.</h2><p>A aposta pode ocupar dinheiro, tempo, emoção, rotina e esperança. A saída precisa cuidar desse espaço também.</p></div>
+        <div class="section-head"><div class="kicker">A SAÍDA É UMA JORNADA</div><h2>Parar é o começo. Não o fim.</h2><p>O produto acompanha o espaço entre fechar a porta das apostas e voltar a construir uma vida que não precise delas.</p></div>
         <div class="journey">
-          <div class="step"><b>01</b><strong>VER</strong><p>Enxergar o padrão.</p></div>
-          <div class="step"><b>02</b><strong>DECIDIR</strong><p>Escolher o próximo passo.</p></div>
-          <div class="step"><b>03</b><strong>PROTEGER</strong><p>Criar barreiras.</p></div>
-          <div class="step"><b>04</b><strong>ATRAVESSAR</strong><p>Passar pelos impulsos.</p></div>
-          <div class="step"><b>05</b><strong>RECONSTRUIR</strong><p>Recuperar espaço e rotina.</p></div>
-          <div class="step"><b>06</b><strong>VIVER</strong><p>Construir uma vida sem a aposta.</p></div>
+          <div class="step"><b>01</b><strong>VER</strong><p>Reconhecer o padrão.</p></div><div class="step"><b>02</b><strong>DECIDIR</strong><p>Escolher o próximo passo.</p></div><div class="step"><b>03</b><strong>PROTEGER</strong><p>Criar barreiras.</p></div><div class="step"><b>04</b><strong>ATRAVESSAR</strong><p>Passar pelos gatilhos.</p></div><div class="step"><b>05</b><strong>RECONSTRUIR</strong><p>Preencher o espaço.</p></div><div class="step"><b>06</b><strong>VIVER</strong><p>Voltar para a vida.</p></div>
         </div>
       </div>
     </section>
 
-    <section id="como">
+    <section id="espelho">
       <div class="wrap">
-        <div class="sectionhead"><div class="kicker">SEM FÓRMULA MÁGICA</div><h2>A autoexclusão fecha uma porta. A jornada cuida do que vem depois.</h2></div>
-        <div class="statement"><blockquote>“Você tirou a aposta da sua frente. Agora precisamos devolver alguma coisa para o lugar que ela ocupava na sua vida.”</blockquote><cite>O foco não é recuperar dinheiro apostando. É recuperar controle sobre a própria vida.</cite></div>
+        <div class="section-head"><div class="kicker">ESPELHO</div><h2>Não precisamos colocar um rótulo em você.</h2><p>Precisamos olhar para o que está acontecendo. O objetivo é produzir insight e orientar ação — não prender você em um questionário.</p></div>
+        <div class="statement"><p>O problema pode não ser a aposta que você fez hoje.<br><strong>Pode ser o que acontece depois dela.</strong></p></div>
       </div>
     </section>
 
-    <section id="impulso">
+    <section id="parar">
       <div class="wrap">
-        <div class="sectionhead"><div class="kicker">02:13 · IMPULSO</div><h2>Se a vontade está acontecendo agora, não tome a próxima decisão no automático.</h2><p>Primeiro: pare. Não transfira. Não tente recuperar a perda imediatamente. Crie dois minutos de distância e depois escolha uma ação de proteção.</p></div>
-        <div class="actions"><a class="btn primary" href="#falar">FALAR AGORA</a><a class="btn secondary" href="#proteger">PROTEGER MEU DINHEIRO</a></div>
+        <div class="section-head"><div class="kicker">QUERO PARAR</div><h2>Decisão vira proteção quando ganha barreiras.</h2><p>Não depender apenas de força de vontade. Trabalhar acesso, dinheiro, ambiente, pessoas e rotina.</p></div>
+        <div class="split"><div class="card"><h3>PROTEGER</h3><p>Primeiro, impedir que o próximo impulso encontre caminho fácil.</p><ul><li>reduzir acesso às apostas;</li><li>proteger dinheiro essencial;</li><li>definir uma pessoa de confiança;</li><li>preparar um plano para gatilhos.</li></ul></div><div class="card"><h3>SAIR</h3><p>Quando fizer sentido, usar a autoexclusão oficial como uma barreira de acesso.</p><ul><li>ponte para o serviço oficial;</li><li>sem pedir senha do Gov.br;</li><li>sem fingir ser o Governo;</li><li>retorno ao BET, CHEGA. para continuar a jornada.</li></ul></div></div>
       </div>
     </section>
 
-    <section id="falar">
-      <div class="wrap">
-        <div class="talk">
-          <div class="talkbox"><h3>FALA.</h3><p>Você não precisa explicar bonito. Só diga o que aconteceu. O produto deve ajudar a organizar o próximo passo, não julgar você.</p><a class="btn secondary" href="#jornada">CONTINUAR</a></div>
-          <div class="talkbox" id="proteger"><h3>PROTEGER.</h3><p>Acesso. Dinheiro. Ambiente. Pessoas. Rotina. As barreiras certas dependem do seu momento.</p><a class="btn primary" href="#parar">MONTAR PROTEÇÃO</a></div>
-        </div>
-      </div>
+    <section id="autoexclusao">
+      <div class="wrap"><div class="section-head"><div class="kicker">JÁ ME AUTOEXCLUÍ</div><h2>Você fechou uma porta. Agora vamos cuidar do que fica do lado de dentro.</h2><p>A autoexclusão reduz o acesso. Ela não preenche sozinha a rotina, a emoção, a expectativa ou o espaço que a aposta ocupava.</p></div><div class="statement"><p><strong>A retirada do campo de batalha é só o começo.</strong><br>Agora começa a travessia.</p></div></div>
     </section>
 
-    <section id="espelho"><div class="wrap"><div class="sectionhead"><div class="kicker">ESPELHO</div><h2>Não precisamos colocar um rótulo em você. Precisamos olhar para o que está acontecendo.</h2><p>O produto deve produzir insight e orientar ação — não prender você dentro de um questionário.</p></div><a class="btn primary" href="#parar">QUERO OLHAR PARA ISSO</a></div></section>
+    <section id="recaida">
+      <div class="wrap"><div class="section-head"><div class="kicker">RECAÍDA</div><h2>A recaída termina aqui.</h2><p>Sem humilhação, sem castigo e sem fingir que nada aconteceu. Interromper. Conter. Entender. Proteger. Retomar.</p></div><div class="card"><h3>PRÓXIMO PASSO</h3><p>Impedir a perseguição da perda e descobrir qual foi o primeiro ponto em que a barreira deixou de funcionar.</p><a class="btn primary" href="#impulso">PRECISO INTERROMPER AGORA</a></div></div>
+    </section>
 
-    <section id="parar"><div class="wrap"><div class="sectionhead"><div class="kicker">QUERO PARAR</div><h2>Parar não é simplesmente não apostar.</h2><p>É construir condições para conseguir continuar sem apostar: proteger acesso, dinheiro, ambiente, relações e os primeiros dias.</p></div><div class="actions"><a class="btn primary" href="#autoexclusao">CRIAR MINHA PROTEÇÃO</a><a class="btn secondary" href="#jornada">VER A JORNADA</a></div></div></section>
+    <section id="familia">
+      <div class="wrap"><div class="section-head"><div class="kicker">FAMÍLIA</div><h2>Ajudar não significa se perder junto.</h2><p>Orientação para conversar, estabelecer limites e proteger a própria vida financeira e emocional.</p></div><div class="statement"><p>Você pode apoiar alguém sem <strong>pagar a próxima aposta.</strong></p></div></div>
+    </section>
 
-    <section id="autoexclusao"><div class="wrap"><div class="sectionhead"><div class="kicker">JÁ ME AUTOEXCLUÍ</div><h2>Você já fechou a porta.</h2><p>A autoexclusão é uma decisão concreta. Agora vamos cuidar do impulso, do dinheiro, da rotina e do espaço que ficou depois dela.</p></div><div class="statement"><blockquote>A retirada do campo de batalha não é a linha de chegada.</blockquote><cite>O próximo passo é atravessar.</cite></div></div></section>
+    <section id="dinheiro">
+      <div class="wrap"><div class="section-head"><div class="kicker">DINHEIRO</div><h2>Você não precisa recuperar na aposta.</h2><p>Precisa parar de perder, proteger o essencial e organizar o que ficou.</p></div><div class="split"><div class="card"><h3>CONTER</h3><p>Separar perda de dívida e proteger moradia, alimentação, saúde e dependentes.</p></div><div class="card"><h3>RECONSTRUIR</h3><p>Mapear valores, vencimentos e prioridades sem transformar a aposta em plano financeiro.</p></div></div></div>
+    </section>
 
-    <section id="recaida"><div class="wrap"><div class="sectionhead"><div class="kicker">RECAÍDA</div><h2>A recaída aciona uma resposta. Não apaga a jornada.</h2><p>Interromper → conter → entender → proteger → retomar. Sem humilhação. Sem perseguir a perda. Sem fingir que nada aconteceu.</p></div><a class="btn primary" href="#parar">RETOMAR PROTEÇÃO</a></div></section>
-
-    <section id="familia"><div class="wrap"><div class="sectionhead"><div class="kicker">FAMÍLIA</div><h2>Como ajudar alguém sem destruir a própria vida?</h2><p>Ajudar não é pagar a próxima aposta. Limite não significa abandono. Quem ajuda também precisa de proteção.</p></div><a class="btn primary" href="#parar">QUERO AJUDAR</a></div></section>
-
-    <section id="dinheiro"><div class="wrap"><div class="sectionhead"><div class="kicker">DINHEIRO</div><h2>Você não precisa recuperar o dinheiro na aposta.</h2><p>Precisa parar de perder dinheiro nela. Primeiro protegemos o essencial. Depois organizamos o que ficou.</p></div><a class="btn primary" href="#parar">COMEÇAR A ORGANIZAR</a></div></section>
-
-    <section id="crise"><div class="wrap"><div class="sectionhead"><div class="kicker">EMERGÊNCIA</div><h2>Em crise, não tentamos resolver tudo.</h2><p>Primeiro reduzimos o risco e conectamos você a ajuda real. Se existe risco imediato, procure um serviço de emergência ou uma pessoa de confiança que possa estar com você agora.</p></div><div class="statement crisis"><blockquote>Você não precisa resolver sua vida hoje.</blockquote><cite>O próximo passo é ficar seguro.</cite></div></div></section>
+    <section id="crise">
+      <div class="wrap"><div class="section-head crisis"><div class="kicker">EMERGÊNCIA</div><h2>Em crise, a prioridade é segurança.</h2><p>O BET, CHEGA. não substitui emergência, profissional de saúde ou ajuda humana. Ele deve ajudar a reduzir risco e conectar você a apoio real.</p></div><div class="card crisis"><h3>SE HÁ RISCO IMEDIATO</h3><p>Procure um lugar seguro, fique perto de uma pessoa de confiança e procure o serviço de emergência ou atendimento adequado à sua situação.</p></div></div>
+    </section>
   </main>
 
-  <footer><div class="wrap footerline"><div><span class="lime">BET, CHEGA.</span> — infraestrutura independente de saída das apostas.</div><div>Sem julgamento. Privacidade em primeiro lugar.</div></div></footer>
+  <footer><div class="wrap footer-row"><div><span class="lime">BET, CHEGA.</span> — infraestrutura independente de saída das apostas.</div><div>Sem julgamento. Privacidade por padrão.</div></div></footer>
 
-  <!-- MODO IMPULSO V1 -->
-  <div class="impulse-overlay" id="impulseOverlay" role="dialog" aria-modal="true" aria-labelledby="impulseTitle">
+  <!-- MODO IMPULSO V2 -->
+  <div class="impulse-overlay" id="impulso" role="dialog" aria-modal="true" aria-labelledby="impulse-title" aria-hidden="true">
     <div class="impulse-panel">
+      <button class="impulse-close" id="closeImpulse" type="button" aria-label="Fechar Modo Impulso">×</button>
       <div class="impulse-kicker">MODO IMPULSO · AGORA</div>
-      <div class="impulse-breathing">
-        <img src="repirando.png" alt="Pessoa respirando profundamente durante uma pausa" loading="eager">
-        <div class="impulse-breathing-copy">
-          <h3 id="impulseTitle">SOLTE O AR.<strong>BEM DEVAGAR.</strong></h3>
-          <p>O dinheiro que foi hoje já foi.<br><strong>Nada será resolvido na próxima hora jogando mais.</strong></p>
-          <p>Fique aqui com a gente.</p>
-          <div class="impulse-timer" id="impulseTimer">00:30</div>
-          <div class="impulse-status" id="impulseStatus">Não transfira. Não abra a casa de aposta. Não tente recuperar agora.</div>
+      <div class="impulse-grid">
+        <img class="impulse-image" src="repirando.png" alt="Pessoa respirando profundamente durante uma pausa" loading="eager">
+        <div class="impulse-copy">
+          <h2 id="impulse-title">SOLTE O AR.<strong>BEM DEVAGAR.</strong></h2>
+          <p>O dinheiro que foi hoje já foi.</p>
+          <p><strong>Nada será resolvido na próxima hora jogando mais.</strong></p>
+          <p>Não transfira. Não abra a casa de aposta. Não tente recuperar agora.</p>
+          <div class="timer" id="timer">00:30</div>
+          <div class="impulse-status" id="impulseStatus">Fique aqui. Quando estiver pronto, comece a pausa.</div>
+          <div class="start-wrap"><button class="btn primary" id="startImpulse" type="button">COMEÇAR A PAUSA</button></div>
         </div>
       </div>
-      <div class="impulse-actions"><button class="btn primary" id="startImpulse" type="button">COMEÇAR A PAUSA</button></div>
-      <div id="impulseSpeak" hidden>
-        <p style="margin-top:24px;margin-bottom:10px;color:var(--text);font-weight:850">O QUE ACONTECEU AGORA?</p>
-        <div class="impulse-options">
-          <button class="impulse-option" type="button" data-impulse="Perdi dinheiro.">Perdi dinheiro.</button>
-          <button class="impulse-option" type="button" data-impulse="Estou querendo recuperar.">Estou querendo recuperar.</button>
-          <button class="impulse-option" type="button" data-impulse="Estou quase apostando.">Estou quase apostando.</button>
-          <button class="impulse-option" type="button" data-impulse="Já transferi dinheiro.">Já transferi dinheiro.</button>
-          <button class="impulse-option" type="button" data-impulse="Não sei o que fazer.">Não sei o que fazer.</button>
+      <div class="speak" id="speak" hidden>
+        <div class="speak-title">O QUE ACONTECEU AGORA?</div>
+        <div class="options">
+          <button class="option" data-answer="Perdi dinheiro.">Perdi dinheiro.</button>
+          <button class="option" data-answer="Estou querendo recuperar.">Estou querendo recuperar.</button>
+          <button class="option" data-answer="Estou quase apostando.">Estou quase apostando.</button>
+          <button class="option" data-answer="Já transferi dinheiro.">Já transferi dinheiro.</button>
+          <button class="option" data-answer="Não sei o que fazer.">Não sei o que fazer.</button>
         </div>
-        <div class="impulse-response" id="impulseResponse">
-          <strong>ENTÃO O PRÓXIMO PASSO É IMPEDIR A PRÓXIMA APOSTA.</strong>
-          <span id="impulseResponseText">Você não precisa resolver sua vida agora. Precisa criar uma barreira concreta para este momento.</span>
-          <div class="impulse-actions">
-            <a class="btn primary" href="#parar">QUERO PROTEGER MEU DINHEIRO</a>
-            <a class="btn secondary" href="#autoexclusao">QUERO FECHAR A PORTA</a>
-          </div>
-        </div>
+        <div class="response" id="response"><strong>ENTÃO O PRÓXIMO PASSO É IMPEDIR A PRÓXIMA APOSTA.</strong><span id="responseText">Você não precisa resolver sua vida agora. Precisa criar uma barreira concreta para este momento.</span><div class="response-actions"><a class="btn primary" href="#parar">QUERO PROTEGER MEU DINHEIRO</a><a class="btn secondary" href="#autoexclusao">QUERO FECHAR A PORTA</a></div></div>
       </div>
-      <button class="impulse-close" id="closeImpulse" type="button">Fechar e voltar</button>
     </div>
   </div>
 
   <script>
-    (() => {
-      const overlay=document.getElementById('impulseOverlay');
+    (()=>{
+      const overlay=document.getElementById('impulso');
       const start=document.getElementById('startImpulse');
-      const timer=document.getElementById('impulseTimer');
+      const timer=document.getElementById('timer');
       const status=document.getElementById('impulseStatus');
-      const speak=document.getElementById('impulseSpeak');
-      const response=document.getElementById('impulseResponse');
-      const responseText=document.getElementById('impulseResponseText');
+      const speak=document.getElementById('speak');
+      const response=document.getElementById('response');
+      const responseText=document.getElementById('responseText');
       const close=document.getElementById('closeImpulse');
-      let remaining=30, interval=null;
-      const format=s=>String(Math.floor(s/60)).padStart(2,'0')+':'+String(s%60).padStart(2,'0');
-      function openImpulse(e){e&&e.preventDefault();overlay.classList.add('is-open');document.body.style.overflow='hidden';start.focus()}
-      function closeImpulse(){overlay.classList.remove('is-open');document.body.style.overflow='';clearInterval(interval)}
-      function pause(){clearInterval(interval);remaining=30;timer.textContent=format(remaining);start.disabled=true;start.textContent='RESPIRANDO...';status.textContent='Solte o ar bem devagar. Fique aqui.';interval=setInterval(()=>{remaining--;timer.textContent=format(Math.max(remaining,0));if(remaining<=0){clearInterval(interval);start.disabled=false;start.textContent='PAUSA CONCLUÍDA';status.textContent='Você ficou aqui. Agora vamos entender o que aconteceu.';speak.hidden=false;document.querySelector('[data-impulse]')?.focus()}},1000)}
-      document.querySelectorAll('a[href="#impulso"]').forEach(a=>a.addEventListener('click',openImpulse));
-      start.addEventListener('click',pause);
-      close.addEventListener('click',closeImpulse);
-      overlay.addEventListener('click',e=>{if(e.target===overlay)closeImpulse()});
-      document.addEventListener('keydown',e=>{if(e.key==='Escape'&&overlay.classList.contains('is-open'))closeImpulse()});
-      document.querySelectorAll('[data-impulse]').forEach(b=>b.addEventListener('click',()=>{document.querySelectorAll('[data-impulse]').forEach(x=>x.classList.remove('is-selected'));b.classList.add('is-selected');response.classList.add('is-visible');responseText.textContent=b.dataset.impulse==='Estou querendo recuperar.'?'Então o próximo problema não é recuperar a perda. É impedir que mais dinheiro saia agora.':'Você não precisa resolver sua vida agora. Precisa criar uma barreira concreta para este momento.'}));
-      overlay.querySelectorAll('a[href^="#"]').forEach(a=>a.addEventListener('click',closeImpulse));
+      let remaining=30,interval=null;
+      const format=n=>`00:${String(n).padStart(2,'0')}`;
+      function open(){
+        clearInterval(interval);remaining=30;timer.textContent=format(remaining);start.disabled=false;start.textContent='COMEÇAR A PAUSA';status.textContent='Fique aqui. Quando estiver pronto, comece a pausa.';speak.hidden=true;response.classList.remove('show');document.querySelectorAll('.option').forEach(b=>b.classList.remove('selected'));overlay.classList.add('open');overlay.setAttribute('aria-hidden','false');document.body.classList.add('locked');setTimeout(()=>start.focus(),40);
+      }
+      function shut(){clearInterval(interval);overlay.classList.remove('open');overlay.setAttribute('aria-hidden','true');document.body.classList.remove('locked')}
+      function pause(){
+        if(start.disabled)return;remaining=30;start.disabled=true;start.textContent='RESPIRANDO...';status.textContent='Solte o ar bem devagar. Fique aqui.';timer.textContent=format(remaining);
+        interval=setInterval(()=>{remaining--;timer.textContent=format(Math.max(remaining,0));if(remaining<=0){clearInterval(interval);start.disabled=false;start.textContent='PAUSA CONCLUÍDA';status.textContent='Você ficou aqui. Agora vamos entender o que aconteceu.';speak.hidden=false;document.querySelector('.option')?.focus()}},1000);
+      }
+      document.querySelectorAll('[data-open-impulse]').forEach(a=>a.addEventListener('click',e=>{e.preventDefault();open()}));
+      start.addEventListener('click',pause);close.addEventListener('click',shut);
+      overlay.addEventListener('click',e=>{if(e.target===overlay)shut()});
+      document.addEventListener('keydown',e=>{if(e.key==='Escape'&&overlay.classList.contains('open'))shut()});
+      document.querySelectorAll('.option').forEach(button=>button.addEventListener('click',()=>{document.querySelectorAll('.option').forEach(b=>b.classList.remove('selected'));button.classList.add('selected');response.classList.add('show');responseText.textContent=button.dataset.answer==='Estou querendo recuperar.'?'Então o próximo problema não é recuperar a perda. É impedir que mais dinheiro saia agora.':'Você não precisa resolver sua vida agora. Precisa criar uma barreira concreta para este momento.'}));
+      document.querySelectorAll('.response-actions a').forEach(a=>a.addEventListener('click',shut));
     })();
   </script>
-
 </body>
 </html>
