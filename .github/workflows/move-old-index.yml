@@ -1,0 +1,32 @@
+name: Move old index to docs
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - '.github/workflows/move-old-index.yml'
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  move-old-index:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Move old index
+        shell: bash
+        run: |
+          if [ -f index._old.html ]; then
+            rm -f docs/index-antigo.html
+            mv index._old.html docs/index-antigo.html
+          fi
+      - name: Commit and push
+        shell: bash
+        run: |
+          git config user.name "BET, CHEGA. Bot"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add index._old.html docs/index-antigo.html
+          git diff --cached --quiet && exit 0
+          git commit -m "docs: mover index antigo para docs"
+          git push
