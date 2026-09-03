@@ -1,4 +1,4 @@
-name: Fix logo alignment and build impulse mode
+name: Fix logo alignment
 
 on:
   push:
@@ -12,187 +12,34 @@ permissions:
   contents: write
 
 jobs:
-  build-home-experience:
+  fix-logo:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Consolidate logo and build Modo Impulso
+      - name: Consolidate logo as one visual unit
         shell: bash
         run: |
           python - <<'PY'
           from pathlib import Path
           p = Path('index.html')
           s = p.read_text(encoding='utf-8')
-
-          # Logo: one typographic unit.
           old_html = '<a class="logo" href="#top" aria-label="BET, CHEGA.">BET<span>,</span>CHEGA<span>.</span></a>'
           new_html = '<a class="logo" href="#top" aria-label="BET, CHEGA.">BET, CHEGA.</a>'
           s = s.replace(old_html, new_html, 1)
-
           old_css = '.logo{display:inline-flex;align-items:baseline;font-weight:950;font-size:25px;letter-spacing:-.055em;line-height:1;white-space:nowrap}.logo span{color:var(--lime);display:inline;margin:0}'
           new_css = '.logo{display:inline-flex;align-items:center;font-weight:950;font-size:25px;letter-spacing:-.055em;line-height:1;white-space:nowrap;transform:translateY(1px)}'
           s = s.replace(old_css, new_css, 1)
-
-          old_mobile = '.logo{font-size:22px}'
-          new_mobile = '.logo{font-size:22px;transform:translateY(1px)}'
-          s = s.replace(old_mobile, new_mobile, 1)
-
-          # Modo Impulso CSS.
-          impulse_css = r'''
-
-    .impulse-overlay{position:fixed;inset:0;z-index:100;background:rgba(5,6,8,.88);backdrop-filter:blur(18px);display:none;align-items:center;justify-content:center;padding:20px}
-    .impulse-overlay.is-open{display:flex}
-    .impulse-panel{width:min(680px,100%);max-height:min(92svh,760px);overflow:auto;background:#111419;border:1px solid #30353d;border-radius:22px;box-shadow:0 30px 100px rgba(0,0,0,.6);padding:32px}
-    .impulse-kicker{color:var(--lime);font-size:11px;font-weight:950;letter-spacing:.16em;margin-bottom:12px}
-    .impulse-panel h2{font-size:clamp(34px,6vw,58px);line-height:.95;letter-spacing:-.055em;margin:0 0 14px;font-weight:950}
-    .impulse-panel h2 strong{color:var(--lime);display:block}
-    .impulse-panel p{color:var(--muted);font-size:16px;margin:0 0 22px}
-    .impulse-timer{font-variant-numeric:tabular-nums;font-size:76px;line-height:1;font-weight:950;letter-spacing:-.06em;margin:22px 0;text-align:center}
-    .impulse-status{text-align:center;color:#c7cbd1;font-size:13px;min-height:20px}
-    .impulse-options{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:20px}
-    .impulse-option{border:1px solid var(--line);background:#171a20;color:var(--text);border-radius:12px;padding:15px;text-align:left;font-weight:800;cursor:pointer}
-    .impulse-option:hover,.impulse-option.is-selected{border-color:var(--lime);background:#151d18}
-    .impulse-response{display:none;margin-top:20px;padding:18px;border:1px solid rgba(16,245,106,.2);background:rgba(16,245,106,.045);border-radius:14px}
-    .impulse-response.is-visible{display:block}
-    .impulse-response strong{display:block;font-size:18px;margin-bottom:7px}
-    .impulse-actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:18px}
-    .impulse-actions .btn{min-height:48px}
-    .impulse-close{display:block;margin:18px auto 0;background:none;border:0;color:#777d86;font-size:12px;cursor:pointer;padding:8px}
-    @media(max-width:560px){.impulse-panel{padding:24px;border-radius:18px}.impulse-options{grid-template-columns:1fr}.impulse-timer{font-size:64px}}
-          '''
-          if '.impulse-overlay{' not in s:
-              s = s.replace('</style>', impulse_css + '\n  </style>', 1)
-
-          # Modo Impulso markup + behavior. Idempotent marker prevents duplicates.
-          impulse_markup = r'''
-
-  <!-- MODO IMPULSO: primeira barreira entre impulso e próxima aposta -->
-  <div class="impulse-overlay" id="impulseOverlay" role="dialog" aria-modal="true" aria-labelledby="impulseTitle">
-    <div class="impulse-panel">
-      <div class="impulse-kicker">MODO IMPULSO · AGORA</div>
-      <h2 id="impulseTitle">LARGA O CELULAR.<strong>NÃO APOSTA AGORA.</strong></h2>
-      <p>O dinheiro que foi, já foi. Apostar mais agora não recupera a noite. Primeiro vamos criar espaço entre você e a próxima decisão.</p>
-
-      <div class="impulse-timer" id="impulseTimer">02:00</div>
-      <div class="impulse-status" id="impulseStatus">Respira. Durante estes dois minutos, não transfere dinheiro e não abre a casa de aposta.</div>
-
-      <div class="impulse-actions">
-        <button class="btn primary" id="startImpulse" type="button">COMEÇAR A PAUSA</button>
-      </div>
-
-      <div id="impulseSpeak" hidden>
-        <p style="margin-top:24px;margin-bottom:10px;color:var(--text);font-weight:850">O QUE ACONTECEU AGORA?</p>
-        <div class="impulse-options">
-          <button class="impulse-option" type="button" data-impulse="Perdi dinheiro.">Perdi dinheiro.</button>
-          <button class="impulse-option" type="button" data-impulse="Estou querendo recuperar.">Estou querendo recuperar.</button>
-          <button class="impulse-option" type="button" data-impulse="Estou quase apostando.">Estou quase apostando.</button>
-          <button class="impulse-option" type="button" data-impulse="Já transferi dinheiro.">Já transferi dinheiro.</button>
-          <button class="impulse-option" type="button" data-impulse="Não sei o que fazer.">Não sei o que fazer.</button>
-        </div>
-
-        <div class="impulse-response" id="impulseResponse">
-          <strong>ENTÃO O PRÓXIMO PASSO É IMPEDIR A PRÓXIMA APOSTA.</strong>
-          <span id="impulseResponseText">Você não precisa resolver sua vida agora. Precisa criar uma barreira concreta para este momento.</span>
-          <div class="impulse-actions">
-            <a class="btn primary" href="#parar">QUERO PROTEGER MEU DINHEIRO</a>
-            <a class="btn secondary" href="#autoexclusao">QUERO FECHAR A PORTA</a>
-          </div>
-        </div>
-      </div>
-
-      <button class="impulse-close" id="closeImpulse" type="button">Fechar e voltar</button>
-    </div>
-  </div>
-
-  <script>
-    (() => {
-      const overlay = document.getElementById('impulseOverlay');
-      const start = document.getElementById('startImpulse');
-      const timer = document.getElementById('impulseTimer');
-      const status = document.getElementById('impulseStatus');
-      const speak = document.getElementById('impulseSpeak');
-      const response = document.getElementById('impulseResponse');
-      const responseText = document.getElementById('impulseResponseText');
-      const close = document.getElementById('closeImpulse');
-      let remaining = 120;
-      let interval = null;
-
-      function formatTime(seconds){
-        const m = String(Math.floor(seconds / 60)).padStart(2,'0');
-        const s = String(seconds % 60).padStart(2,'0');
-        return `${m}:${s}`;
-      }
-      function openImpulse(e){
-        if(e) e.preventDefault();
-        overlay.classList.add('is-open');
-        document.body.style.overflow = 'hidden';
-        start.focus();
-      }
-      function closeImpulse(){
-        overlay.classList.remove('is-open');
-        document.body.style.overflow = '';
-        clearInterval(interval);
-      }
-      function startPause(){
-        clearInterval(interval);
-        remaining = 120;
-        timer.textContent = formatTime(remaining);
-        start.disabled = true;
-        start.textContent = 'PAUSA EM ANDAMENTO';
-        status.textContent = 'Agora é só atravessar estes dois minutos. Não transfere. Não aposta.';
-        speak.hidden = false;
-        interval = setInterval(() => {
-          remaining -= 1;
-          timer.textContent = formatTime(Math.max(remaining,0));
-          if(remaining <= 0){
-            clearInterval(interval);
-            start.disabled = false;
-            start.textContent = 'RESPIRAR DE NOVO';
-            status.textContent = 'A pausa terminou. A decisão continua sendo sua — mas agora existe espaço para escolher.';
-          }
-        },1000);
-      }
-
-      document.querySelectorAll('a[href="#entrar"]').forEach(a => a.addEventListener('click', () => {}));
-      document.querySelectorAll('a[href="#impulso"]').forEach(a => a.addEventListener('click', openImpulse));
-      start.addEventListener('click', startPause);
-      close.addEventListener('click', closeImpulse);
-      overlay.addEventListener('click', e => { if(e.target === overlay) closeImpulse(); });
-      document.addEventListener('keydown', e => { if(e.key === 'Escape' && overlay.classList.contains('is-open')) closeImpulse(); });
-
-      document.querySelectorAll('[data-impulse]').forEach(button => {
-        button.addEventListener('click', () => {
-          document.querySelectorAll('[data-impulse]').forEach(b => b.classList.remove('is-selected'));
-          button.classList.add('is-selected');
-          const value = button.dataset.impulse;
-          response.classList.add('is-visible');
-          responseText.textContent = value === 'Estou querendo recuperar.'
-            ? 'Então o próximo problema não é recuperar a perda. É impedir que mais dinheiro saia agora.'
-            : 'Você não precisa resolver sua vida agora. Precisa criar uma barreira concreta para este momento.';
-        });
-      });
-
-      overlay.querySelectorAll('a[href^="#"]').forEach(a => a.addEventListener('click', closeImpulse));
-    })();
-  </script>
-'''
-          if '<!-- MODO IMPULSO:' not in s:
-              s = s.replace('</body>', impulse_markup + '\n</body>', 1)
-
-          # Both primary CTA and first choice enter the same immediate experience.
-          s = s.replace('href="#entrar">CHEGA POR HOJE. QUERO RESPIRAR.</a>', 'href="#impulso">CHEGA POR HOJE. QUERO RESPIRAR.</a>', 1)
-
           p.write_text(s, encoding='utf-8')
           PY
 
       - name: Commit and push
         shell: bash
         run: |
-          git config user.name "BET, CHEGA. Bot"
-          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git config user.name 'BET, CHEGA. Bot'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
           git add index.html
           git diff --cached --quiet && exit 0
-          git commit -m "feat: adicionar Modo Impulso à Home"
+          git commit -m 'fix: consolidar logo BET, CHEGA. como unidade'
           git push
