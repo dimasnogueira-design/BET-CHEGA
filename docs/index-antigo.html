@@ -1,51 +1,590 @@
 <!DOCTYPE html>
-<html lang="pt-BR">
+<html lang="pt-BR" class="scroll-smooth">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="theme-color" content="#0B0C0E" />
-  <meta name="description" content="BET, CHEGA. — infraestrutura independente de saída das apostas." />
-  <title>BET, CHEGA. — A porta de saída das apostas</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>BET, CHEGA. — O Momento de Parar</title>
+
+  <!-- Google Fonts: Plus Jakarta Sans & Inter -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Plus+Jakarta+Sans:wght@700;800;900&display=swap" rel="stylesheet">
+
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            carbon: '#0B0C0E',
+            graphite: {
+              DEFAULT: '#14171E',
+              card: '#11141B',
+              border: '#232833',
+              hover: '#1B202A'
+            },
+            lime: {
+              DEFAULT: '#10F56A',
+              hover: '#0DE05F',
+              glow: 'rgba(16, 245, 106, 0.25)'
+            }
+          },
+          fontFamily: {
+            sans: ['Inter', 'sans-serif'],
+            display: ['"Plus Jakarta Sans"', 'sans-serif']
+          }
+        }
+      }
+    }
+  </script>
+
   <style>
-    :root{--carbon:#0b0c0e;--graphite:#17191e;--line:#292c33;--text:#f4f5f6;--muted:#9da2aa;--lime:#10f56a;--danger:#ff5b5b;--max:1180px}
-    *{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:var(--carbon);color:var(--text);font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;line-height:1.5}button,a{font:inherit}a{text-decoration:none;color:inherit}.wrap{width:min(var(--max),calc(100% - 40px));margin:auto}
-    header{position:sticky;top:0;z-index:20;background:rgba(11,12,14,.88);backdrop-filter:blur(16px);border-bottom:1px solid rgba(255,255,255,.06)}.nav{height:72px;display:flex;align-items:center;justify-content:space-between}.logo{display:inline-flex;align-items:baseline;font-weight:900;font-size:24px;letter-spacing:-.045em;line-height:1;white-space:nowrap}.logo span{color:var(--lime);display:inline;margin:0}.navlinks{display:flex;gap:22px;align-items:center;color:var(--muted);font-size:14px}.emergency{color:var(--text);border:1px solid var(--line);padding:9px 13px;border-radius:999px}.emergency:hover{border-color:var(--danger)}
-    main{overflow:hidden}.hero{min-height:calc(100vh - 72px);display:grid;place-items:center;padding:80px 0 70px;position:relative}.hero:before{content:"";position:absolute;width:520px;height:520px;border-radius:50%;background:rgba(16,245,106,.055);filter:blur(80px);right:-220px;top:10%;pointer-events:none}.eyebrow{font-size:12px;letter-spacing:.16em;color:var(--lime);font-weight:800;margin-bottom:22px}.hero h1{font-size:clamp(48px,8vw,92px);line-height:.94;letter-spacing:-.07em;max-width:980px;margin:0 0 28px;font-weight:900}.hero h1 strong{color:var(--lime);display:block}.hero p{font-size:clamp(18px,2vw,22px);color:var(--muted);max-width:690px;margin:0 0 34px}.actions{display:flex;gap:12px;flex-wrap:wrap}.btn{display:inline-flex;align-items:center;justify-content:center;min-height:54px;padding:0 22px;border-radius:10px;border:1px solid var(--line);font-weight:850;cursor:pointer;transition:.2s}.primary{background:var(--lime);color:#06120a;border-color:var(--lime)}.primary:hover{transform:translateY(-1px);filter:brightness(1.05)}.secondary{background:var(--graphite);color:var(--text)}.secondary:hover{border-color:#4a4e56}.note{font-size:13px;color:#777d86;margin-top:16px}
-    section{padding:92px 0;border-top:1px solid rgba(255,255,255,.06)}.sectionhead{max-width:760px;margin-bottom:40px}.sectionhead .kicker{color:var(--lime);font-size:12px;font-weight:850;letter-spacing:.14em}.sectionhead h2{font-size:clamp(32px,5vw,58px);line-height:1;letter-spacing:-.055em;margin:10px 0 16px}.sectionhead p{color:var(--muted);font-size:18px}
-    .choices{display:grid;grid-template-columns:repeat(2,1fr);gap:14px}.choice{background:var(--graphite);border:1px solid var(--line);border-radius:16px;padding:25px;min-height:150px;transition:.2s}.choice:hover{border-color:#50545d;transform:translateY(-2px)}.choice .num{font-size:12px;color:var(--lime);font-weight:850}.choice h3{font-size:22px;margin:8px 0}.choice p{color:var(--muted);margin:0}.choice span{display:inline-block;margin-top:20px;color:var(--lime);font-size:13px;font-weight:800}
-    .journey{display:grid;grid-template-columns:repeat(6,1fr);border:1px solid var(--line);border-radius:16px;overflow:hidden}.step{padding:24px 18px;background:var(--graphite);border-right:1px solid var(--line);min-height:150px}.step:last-child{border-right:0}.step b{display:block;font-size:12px;color:var(--lime);letter-spacing:.1em;margin-bottom:12px}.step strong{font-size:20px}.step p{font-size:13px;color:var(--muted)}
-    .statement{background:var(--graphite);border:1px solid var(--line);border-radius:20px;padding:42px}.statement blockquote{margin:0;font-size:clamp(27px,4vw,48px);font-weight:850;line-height:1.04;letter-spacing:-.04em}.statement cite{display:block;color:var(--muted);margin-top:20px;font-style:normal}
-    .talk{display:grid;grid-template-columns:1fr 1fr;gap:16px}.talkbox{border:1px solid var(--line);background:var(--graphite);border-radius:18px;padding:30px}.talkbox h3{font-size:28px;margin:0 0 10px}.talkbox p{color:var(--muted)}
-    footer{border-top:1px solid var(--line);padding:40px 0 55px;color:var(--muted);font-size:13px}.footerline{display:flex;justify-content:space-between;gap:20px;flex-wrap:wrap}.lime{color:var(--lime)}
-    @media(max-width:800px){.wrap{width:min(var(--max),calc(100% - 28px))}.navlinks a:not(.emergency){display:none}.hero{padding:65px 0}.hero h1{font-size:clamp(46px,14vw,72px)}.choices,.talk{grid-template-columns:1fr}.journey{grid-template-columns:1fr 1fr}.step{border-right:0;border-bottom:1px solid var(--line)}.step:nth-child(odd){border-right:1px solid var(--line)}.step:nth-last-child(-n+2){border-bottom:0}.statement{padding:28px}}
-    @media(max-width:480px){.journey{grid-template-columns:1fr}.step,.step:nth-child(odd){border-right:0;border-bottom:1px solid var(--line)}.step:last-child{border-bottom:0}.actions .btn{width:100%}}
+    body {
+      background-color: #0B0C0E;
+      color: #F8FAFC;
+      overflow-x: hidden;
+    }
+
+    .neon-shadow {
+      box-shadow: 0 0 35px rgba(16, 245, 106, 0.32);
+    }
+
+    .neon-text-glow {
+      text-shadow: 0 0 24px rgba(16, 245, 106, 0.5);
+    }
+
+    /* Animação suave de respiração (ciclo de 14s) */
+    @keyframes breatheCycle {
+      0%, 100% {
+        transform: scale(1);
+        filter: drop-shadow(0 0 15px rgba(16, 245, 106, 0.3));
+        opacity: 0.8;
+      }
+      28% {
+        transform: scale(1.22);
+        filter: drop-shadow(0 0 40px rgba(16, 245, 106, 0.7));
+        opacity: 1;
+      }
+      57% {
+        transform: scale(1.22);
+        filter: drop-shadow(0 0 40px rgba(16, 245, 106, 0.7));
+        opacity: 1;
+      }
+      100% {
+        transform: scale(1);
+        filter: drop-shadow(0 0 15px rgba(16, 245, 106, 0.3));
+        opacity: 0.8;
+      }
+    }
+
+    .animate-breathe {
+      animation: breatheCycle 14s ease-in-out infinite;
+    }
+
+    /* Fusão contínua da foto da pessoa no fundo carbono #0B0C0E */
+    .hero-photo-blend {
+      mask-image: linear-gradient(to right, transparent 0%, black 30%, black 100%),
+                  linear-gradient(to top, transparent 0%, black 25%, black 100%);
+      -webkit-mask-image: linear-gradient(to right, transparent 0%, black 30%, black 100%),
+                          linear-gradient(to top, transparent 0%, black 25%, black 100%);
+      mask-composite: intersect;
+      -webkit-mask-composite: source-in as destination-in;
+    }
+
+    .view-screen {
+      transition: opacity 0.35s ease-out, transform 0.35s ease-out;
+    }
   </style>
 </head>
-<body>
-<header><div class="wrap nav"><a class="logo" href="#top" aria-label="BET, CHEGA.">BET<span>,</span>CHEGA<span>.</span></a><nav class="navlinks"><a href="#jornada">Jornada</a><a href="#como">Como funciona</a><a class="emergency" href="#crise">EMERGÊNCIA</a></nav></div></header>
-<main id="top">
-  <section class="hero"><div class="wrap"><div class="eyebrow">INFRAESTRUTURA DE SAÍDA DAS APOSTAS</div><h1>Você não precisa recuperar o dinheiro.<strong>PRECISA RECUPERAR A SUA VIDA.</strong></h1><p>O BET, CHEGA. ajuda você a interromper o ciclo, criar proteção e atravessar o que vem depois — sem julgamento e sem prometer milagres.</p><div class="actions"><a class="btn primary" href="#entrar">QUERO PARAR AGORA</a><a class="btn secondary" href="#entender">QUERO ENTENDER</a></div><div class="note">Privacidade em primeiro lugar. Você decide o que compartilhar.</div></div></section>
-  <section id="entrar"><div class="wrap"><div class="sectionhead"><div class="kicker">POR ONDE COMEÇAR?</div><h2>Você não precisa chegar sabendo o que fazer.</h2><p>Escolha o que mais parece com o que está acontecendo agora. A jornada muda a partir da sua resposta.</p></div><div class="choices">
-    <a class="choice" href="#impulso"><div class="num">01 · AGORA</div><h3>Estou com vontade de apostar.</h3><p>Se o impulso está acontecendo neste momento, primeiro vamos criar espaço entre você e a próxima aposta.</p><span>ENTRAR NO FREIO →</span></a>
-    <a class="choice" href="#entender"><div class="num">02 · ESPELHO</div><h3>Quero entender o que está acontecendo.</h3><p>Olhar para o padrão sem colocar um rótulo em você.</p><span>COMEÇAR →</span></a>
-    <a class="choice" href="#parar"><div class="num">03 · DECISÃO</div><h3>Quero parar.</h3><p>Vamos transformar a decisão em proteção concreta, passo a passo.</p><span>PROTEGER →</span></a>
-    <a class="choice" href="#autoexclusao"><div class="num">04 · DEPOIS DA APOSTA</div><h3>Já me autoexcluí.</h3><p>A porta foi fechada. Agora precisamos cuidar do espaço que a aposta ocupava.</p><span>ATRAVESSAR →</span></a>
-    <a class="choice" href="#recaida"><div class="num">05 · ACONTECEU</div><h3>Eu recaí.</h3><p>Sem punição e sem voltar ao zero. Vamos interromper, entender e reforçar a proteção.</p><span>RETOMAR →</span></a>
-    <a class="choice" href="#familia"><div class="num">06 · FAMÍLIA</div><h3>Quero ajudar alguém que amo.</h3><p>Ajudar sem virar polícia, banco ou desaparecer dentro do problema de outra pessoa.</p><span>AJUDAR →</span></a>
-    <a class="choice" href="#dinheiro"><div class="num">07 · DINHEIRO</div><h3>O dinheiro está me pressionando.</h3><p>Conter perdas, proteger o essencial e começar a organizar o que ficou.</p><span>ORGANIZAR →</span></a>
-    <a class="choice" href="#crise"><div class="num">08 · CRISE</div><h3>Estou em uma situação grave.</h3><p>Quando existe risco imediato, a prioridade é segurança e conexão com ajuda real.</p><span>VER SEGURANÇA →</span></a>
-  </div></div></section>
-  <section id="jornada"><div class="wrap"><div class="sectionhead"><div class="kicker">A JORNADA</div><h2>Sair é mais do que parar de abrir um aplicativo.</h2><p>A aposta pode ocupar dinheiro, tempo, emoção, rotina e esperança. A saída precisa cuidar desse espaço também.</p></div><div class="journey"><div class="step"><b>01</b><strong>VER</strong><p>Enxergar o padrão.</p></div><div class="step"><b>02</b><strong>DECIDIR</strong><p>Escolher o próximo passo.</p></div><div class="step"><b>03</b><strong>PROTEGER</strong><p>Criar barreiras.</p></div><div class="step"><b>04</b><strong>ATRAVESSAR</strong><p>Passar pelos impulsos.</p></div><div class="step"><b>05</b><strong>RECONSTRUIR</strong><p>Recuperar espaço e rotina.</p></div><div class="step"><b>06</b><strong>VIVER</strong><p>Construir uma vida sem a aposta.</p></div></div></div></section>
-  <section id="como"><div class="wrap"><div class="sectionhead"><div class="kicker">SEM FÓRMULA MÁGICA</div><h2>A autoexclusão fecha uma porta. A jornada começa a cuidar do que vem depois.</h2></div><div class="statement"><blockquote>“Você tirou a aposta da sua frente. Agora precisamos devolver alguma coisa para o lugar que ela ocupava na sua vida.”</blockquote><cite>O foco não é recuperar dinheiro apostando. É recuperar controle sobre a própria vida.</cite></div></div></section>
-  <section id="impulso"><div class="wrap"><div class="sectionhead"><div class="kicker">02:13 · IMPULSO</div><h2>Se a vontade está acontecendo agora, não tome a próxima decisão no automático.</h2><p>Primeiro: pare. Não transfira. Não tente recuperar a perda imediatamente. Crie dois minutos de distância e depois escolha uma ação de proteção.</p></div><div class="actions"><a class="btn primary" href="#falar">FALAR AGORA</a><a class="btn secondary" href="#proteger">PROTEGER MEU DINHEIRO</a></div></div></section>
-  <section id="falar"><div class="wrap"><div class="talk"><div class="talkbox"><h3>FALA.</h3><p>Você não precisa explicar bonito. Só diga o que aconteceu. O produto deve ajudar a organizar o próximo passo, não julgar você.</p><a class="btn secondary" href="#jornada">CONTINUAR</a></div><div class="talkbox" id="proteger"><h3>PROTEGER.</h3><p>Acesso. Dinheiro. Ambiente. Pessoas. Rotina. As barreiras certas dependem do seu momento.</p><a class="btn primary" href="#parar">MONTAR PROTEÇÃO</a></div></div></div></section>
-  <section id="parar"><div class="wrap"><div class="sectionhead"><div class="kicker">QUERO PARAR</div><h2>Parar não é simplesmente não apostar.</h2><p>É construir condições para conseguir continuar sem apostar: proteger acesso, dinheiro, ambiente, relações e os primeiros dias.</p></div><div class="actions"><a class="btn primary" href="#autoexclusao">CRIAR MINHA PROTEÇÃO</a><a class="btn secondary" href="#jornada">VER A JORNADA</a></div></div></section>
-  <section id="autoexclusao"><div class="wrap"><div class="sectionhead"><div class="kicker">JÁ ME AUTOEXCLUÍ</div><h2>Você já fechou a porta.</h2><p>A autoexclusão é uma decisão concreta. Agora vamos cuidar do impulso, do dinheiro, da rotina e do espaço que ficou depois dela.</p></div><div class="statement"><blockquote>A retirada do campo de batalha não é a linha de chegada.</blockquote><cite>O próximo passo é atravessar.</cite></div></div></section>
-  <section id="recaida"><div class="wrap"><div class="sectionhead"><div class="kicker">RECAÍDA</div><h2>A recaída aciona uma resposta. Não apaga a jornada.</h2><p>Interromper → conter → entender → proteger → retomar. Sem humilhação. Sem perseguir a perda. Sem fingir que nada aconteceu.</p></div><a class="btn primary" href="#parar">RETOMAR PROTEÇÃO</a></div></section>
-  <section id="familia"><div class="wrap"><div class="sectionhead"><div class="kicker">FAMÍLIA</div><h2>Como ajudar alguém sem destruir a própria vida?</h2><p>Ajudar não é pagar a próxima aposta. Limite não significa abandono. A jornada também protege quem está ao redor.</p></div><a class="btn secondary" href="#jornada">ENTENDER ESSA JORNADA</a></div></section>
-  <section id="dinheiro"><div class="wrap"><div class="sectionhead"><div class="kicker">DINHEIRO</div><h2>Você não precisa recuperar o dinheiro na aposta.</h2><p>Precisa parar de perder dinheiro nela. Primeiro vem a contenção: proteger o essencial, enxergar dívidas e organizar o próximo passo.</p></div><div class="statement"><blockquote>“A reconstrução começa quando você para de tentar recuperar na aposta.”</blockquote></div></div></section>
-  <section id="crise"><div class="wrap"><div class="sectionhead"><div class="kicker">CRISE · SEGURANÇA PRIMEIRO</div><h2>Se existe risco imediato, não tente resolver tudo aqui.</h2><p>Procure um lugar seguro e uma pessoa de confiança e conecte-se a um serviço de emergência ou crise da sua região. O BET, CHEGA. deve reduzir risco e conectar você a ajuda real — não substituir profissionais.</p></div><div class="actions"><a class="btn primary" href="tel:192">EMERGÊNCIA / SAMU 192</a><a class="btn secondary" href="tel:188">CVV 188</a></div><div class="note">Se o risco for imediato, priorize o serviço de emergência. Se houver violência, priorize sair para um local seguro.</div></div></section>
-</main>
-<footer><div class="wrap footerline"><div><strong class="lime">BET, CHEGA.</strong><br>Infraestrutura independente de saída das apostas.</div><div>VER → DECIDIR → PROTEGER → ATRAVESSAR → RECONSTRUIR → VIVER</div></div></footer>
+<body class="bg-carbon text-slate-100 font-sans antialiased selection:bg-lime selection:text-carbon min-h-screen flex flex-col justify-between">
+
+  <!-- ========================================== -->
+  <!-- BARRA DE SEGURANÇA SUPERIOR (BOTÃO RÁPIDO) -->
+  <!-- ========================================== -->
+  <aside class="bg-[#0e1117] border-b border-graphite-border px-4 py-1.5 text-xs text-slate-400 flex justify-between items-center z-50">
+    <div class="flex items-center gap-2">
+      <span class="inline-block w-2 h-2 rounded-full bg-lime animate-pulse"></span>
+      <span class="hidden sm:inline font-mono text-[11px] text-slate-300">PROTOCOLO DE PAUSA NOTURNA • 02:13</span>
+      <span class="sm:hidden font-mono text-[11px] text-slate-300">PAUSA NOTURNA</span>
+    </div>
+    
+    <button onclick="quickExit()" class="text-slate-400 hover:text-white flex items-center gap-1.5 bg-graphite px-2.5 py-1 rounded text-[11px] border border-graphite-border hover:border-slate-500 transition-colors" title="Fecha imediatamente">
+      <svg class="w-3.5 h-3.5 text-red-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"/>
+      </svg>
+      <span>Saída Rápida (Esc)</span>
+    </button>
+  </aside>
+
+  <!-- ========================================== -->
+  <!-- CABEÇALHO MÍNIMO                           -->
+  <!-- ========================================== -->
+  <header class="w-full max-w-6xl mx-auto px-6 sm:px-8 py-5 flex items-center justify-between z-40 relative">
+    <div onclick="goToScreen(1)" class="cursor-pointer flex items-center gap-1 tracking-tight select-none">
+      <div class="flex items-baseline font-display font-black text-2xl sm:text-3xl text-white leading-none">
+        <span>BET</span>
+        <span class="text-lime text-3xl sm:text-4xl font-black leading-none ml-0.5 neon-text-glow">,</span>
+      </div>
+      <span class="font-display font-black text-2xl sm:text-3xl text-white leading-none tracking-tight ml-1">
+        CHEGA.
+      </span>
+    </div>
+
+    <button onclick="openEmergencyModal()" class="bg-[#1e1315] hover:bg-[#2e171a] text-red-400 hover:text-red-300 border border-red-900/60 hover:border-red-600 px-3.5 py-1.5 rounded text-xs font-bold tracking-wider uppercase transition-all">
+      Ajuda em Crise
+    </button>
+  </header>
+
+  <!-- ======================================================= -->
+  <!-- ÁREA DINÂMICA DAS TELAS DA JORNADA (ESTADOS 1 A 4)       -->
+  <!-- ======================================================= -->
+  <main class="flex-grow flex items-center justify-center relative w-full overflow-hidden px-4 sm:px-6">
+
+    <!-- TELA 1: A ENTRADA (O FREIO IMEDIATO) -->
+    <section id="screen1" class="view-screen w-full max-w-6xl py-6 sm:py-12 relative z-20 flex flex-col lg:flex-row items-center justify-between gap-10">
+      <div class="max-w-xl text-left flex-1">
+        <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#132318] border border-lime/30 text-lime text-xs font-semibold tracking-wider uppercase mb-5">
+          <span class="w-1.5 h-1.5 rounded-full bg-lime"></span>
+          A Porta de Saída das Apostas
+        </div>
+
+        <h2 class="text-slate-300 font-medium text-lg sm:text-2xl md:text-3xl mb-1.5 tracking-tight">
+          Você não precisa recuperar o dinheiro.
+        </h2>
+
+        <h1 class="font-display font-black text-3xl sm:text-5xl md:text-6xl text-white leading-[1.05] tracking-tight mb-6 uppercase">
+          Precisa recuperar<br>a sua vida<span class="text-lime inline-block neon-text-glow font-sans">,</span>
+        </h1>
+
+        <div class="mb-4">
+          <button onclick="goToScreen(2)" class="w-full sm:w-auto bg-lime hover:bg-lime-hover text-carbon font-display font-black text-base sm:text-lg px-8 py-4 rounded-xl uppercase tracking-wide neon-shadow transition-all transform active:scale-95 flex items-center justify-center gap-3 group">
+            <span>Chega por hoje. Quero respirar.</span>
+            <svg class="w-5 h-5 transition-transform group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M14 5l7 7m0 0l-7 7m7-7H3"/>
+            </svg>
+          </button>
+        </div>
+
+        <p class="text-xs text-slate-400 mb-8">
+          100% anônimo. Sem cadastro. Não vamos pedir seu nome.
+        </p>
+
+        <div class="pt-4 border-t border-graphite-border/70 flex items-center justify-between max-w-md">
+          <span class="text-xs text-slate-400">Não é você quem aposta?</span>
+          <button onclick="openFamilyModal()" class="text-xs text-lime hover:underline font-bold transition-all">
+            Quero ajudar alguém que amo →
+          </button>
+        </div>
+      </div>
+
+      <div class="w-full lg:w-[45%] flex justify-center lg:justify-end items-end relative select-none">
+        <div class="relative w-full max-w-[380px] aspect-[4/5] rounded-2xl overflow-hidden bg-gradient-to-t from-carbon via-graphite to-transparent border border-graphite-border/40 shadow-2xl">
+          <img 
+            src="image.png" 
+            alt="Pessoa olhando para cima com alívio e determinação" 
+            class="w-full h-full object-cover object-center filter contrast-110 brightness-95 hero-photo-blend"
+            onerror="handleImageFallback(this)"
+          />
+          <div class="absolute bottom-0 inset-x-0 p-5 bg-gradient-to-t from-carbon via-carbon/90 to-transparent">
+            <span class="text-xs text-slate-400 italic">"O momento de parar não é amanhã. É agora."</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- TELA 2: 30 SEGUNDOS DE RESPIRAÇÃO -->
+    <section id="screen2" class="view-screen hidden w-full max-w-xl text-center py-10 relative z-20 flex-col items-center">
+      <div class="relative w-36 h-36 flex items-center justify-center mb-8">
+        <div class="absolute inset-0 rounded-full bg-lime/10 blur-xl"></div>
+        <div class="text-lime font-display font-black text-8xl leading-none animate-breathe select-none">
+          ,
+        </div>
+      </div>
+
+      <div id="breatheGuideText" class="text-lime font-display font-bold text-xl sm:text-2xl mb-2 tracking-wide transition-all">
+        Puxe o ar pelo nariz...
+      </div>
+
+      <h2 class="text-white font-display font-black text-2xl sm:text-3xl mb-4 leading-tight">
+        Solte devagar.
+      </h2>
+
+      <p class="text-slate-300 text-sm sm:text-base leading-relaxed max-w-md mx-auto mb-8">
+        O dinheiro que foi hoje já foi.<br>
+        <span class="text-white font-semibold">Nada será resolvido na próxima hora jogando mais.</span><br>
+        Fique aqui com a gente.
+      </p>
+
+      <div class="w-full max-w-xs bg-graphite border border-graphite-border rounded-xl p-4 mb-6">
+        <div class="flex justify-between items-center mb-2 text-xs">
+          <span class="text-slate-400">Pausa Biológica:</span>
+          <span id="breathTimerDisplay" class="font-mono text-lime font-black text-base">00:30</span>
+        </div>
+        <div class="w-full bg-[#0B0C0E] h-1.5 rounded-full overflow-hidden">
+          <div id="breathProgressBar" class="bg-lime h-full w-full transition-all duration-1000 ease-linear"></div>
+        </div>
+      </div>
+
+      <button onclick="goToScreen(3)" class="text-xs text-slate-400 hover:text-white underline underline-offset-4 transition-colors">
+        Já respirei. Quero continuar agora →
+      </button>
+    </section>
+
+    <!-- TELA 3: O QUE ACABOU DE ACONTECER? -->
+    <section id="screen3" class="view-screen hidden w-full max-w-2xl py-8 text-center relative z-20 flex-col items-center">
+      <div class="text-xs font-mono font-bold text-lime tracking-widest uppercase mb-3">
+        Espelho Comportamental
+      </div>
+
+      <h2 class="font-display font-black text-2xl sm:text-4xl text-white mb-2 leading-tight">
+        O que acabou de acontecer?
+      </h2>
+
+      <p class="text-slate-400 text-sm mb-8">
+        Suas respostas mostram o caminho. Não há certo ou errado aqui.
+      </p>
+
+      <div class="w-full space-y-3.5 text-left mb-8">
+        <button onclick="selectIncident('lost_recovery')" class="w-full p-5 rounded-xl bg-graphite-card hover:bg-graphite border border-graphite-border hover:border-lime/60 transition-all flex items-center justify-between group">
+          <div>
+            <div class="text-white font-bold text-base sm:text-lg group-hover:text-lime transition-colors">
+              Perdi tentando recuperar o que já tinha perdido
+            </div>
+            <div class="text-xs text-slate-400 mt-1">
+              Entrei no ciclo de apostar mais para tentar cobrir prejuízos recentes.
+            </div>
+          </div>
+          <span class="text-lime text-xl font-bold ml-4 group-hover:translate-x-1 transition-transform">→</span>
+        </button>
+
+        <button onclick="selectIncident('trapped')" class="w-full p-5 rounded-xl bg-graphite-card hover:bg-graphite border border-graphite-border hover:border-lime/60 transition-all flex items-center justify-between group">
+          <div>
+            <div class="text-white font-bold text-base sm:text-lg group-hover:text-lime transition-colors">
+              Não aguento mais essa sensação de estar preso
+            </div>
+            <div class="text-xs text-slate-400 mt-1">
+              Ansiedade constante, celular escondido, culpa e cansaço mental.
+            </div>
+          </div>
+          <span class="text-lime text-xl font-bold ml-4 group-hover:translate-x-1 transition-transform">→</span>
+        </button>
+
+        <button onclick="selectIncident('curious')" class="w-full p-5 rounded-xl bg-graphite-card hover:bg-graphite border border-graphite-border hover:border-lime/60 transition-all flex items-center justify-between group">
+          <div>
+            <div class="text-white font-bold text-base sm:text-lg group-hover:text-lime transition-colors">
+              Só estou curioso / quero entender como funciona
+            </div>
+            <div class="text-xs text-slate-400 mt-1">
+              Quero conhecer o método ou avaliar meus próprios limites.
+            </div>
+          </div>
+          <span class="text-lime text-xl font-bold ml-4 group-hover:translate-x-1 transition-transform">→</span>
+        </button>
+      </div>
+
+      <button onclick="goToScreen(1)" class="text-xs text-slate-500 hover:text-slate-300 transition-colors">
+        ← Voltar ao início
+      </button>
+    </section>
+
+    <!-- TELA 4: PROTEÇÃO IMEDIATA -->
+    <section id="screen4" class="view-screen hidden w-full max-w-xl py-6 text-center relative z-20 flex-col items-center">
+      <div class="w-12 h-12 rounded-full bg-[#132318] border border-lime text-lime flex items-center justify-center mb-4 text-lg font-bold">
+        ✓
+      </div>
+
+      <div class="text-xs font-mono font-bold text-lime tracking-widest uppercase mb-2">
+        Plano de Contenção Noturna
+      </div>
+
+      <h2 class="font-display font-black text-2xl sm:text-3xl text-white mb-3 leading-tight">
+        Você não precisa resolver sua vida inteira agora.<br>
+        <span class="text-lime">Vamos proteger esta noite.</span>
+      </h2>
+
+      <p class="text-slate-300 text-sm leading-relaxed mb-6 max-w-md">
+        Seu cérebro ainda está sob efeito da adrenalina da perda. Para garantir que nada saia da sua conta esta madrugada:
+      </p>
+
+      <div class="w-full bg-graphite-card border border-graphite-border rounded-xl p-5 text-left space-y-4 mb-6">
+        <div class="flex items-start gap-3">
+          <span class="w-6 h-6 rounded-full bg-lime text-carbon font-black text-xs flex items-center justify-center flex-shrink-0 mt-0.5">1</span>
+          <div>
+            <div class="text-white font-bold text-sm">Trave o limite PIX Noturno no banco</div>
+            <div class="text-xs text-slate-400 mt-0.5">Abra seu app do banco agora e reduza o limite das 20h às 06h para R$ 10.</div>
+          </div>
+        </div>
+
+        <div class="flex items-start gap-3">
+          <span class="w-6 h-6 rounded-full bg-lime text-carbon font-black text-xs flex items-center justify-center flex-shrink-0 mt-0.5">2</span>
+          <div>
+            <div class="text-white font-bold text-sm">Feche as abas e deslogue das contas</div>
+            <div class="text-xs text-slate-400 mt-0.5">Não deixe o saldo visível nem a página aberta em segundo plano.</div>
+          </div>
+        </div>
+
+        <div class="flex items-start gap-3">
+          <span class="w-6 h-6 rounded-full bg-lime text-carbon font-black text-xs flex items-center justify-center flex-shrink-0 mt-0.5">3</span>
+          <div>
+            <div class="text-white font-bold text-sm">Deixe o celular longe da cama</div>
+            <div class="text-xs text-slate-400 mt-0.5">Coloque o aparelho para carregar em outro cômodo para quebrar o impulso mecânico.</div>
+          </div>
+        </div>
+      </div>
+
+      <button onclick="finishProtectionNight()" class="w-full bg-lime hover:bg-lime-hover text-carbon font-display font-black text-base py-4 rounded-xl uppercase tracking-wide neon-shadow transition-all transform active:scale-95 mb-4">
+        Protegi Minha Noite. Amanhã é Outro Dia.
+      </button>
+
+      <div class="text-xs text-slate-400">
+        Precisa desabafar com alguém agora? 
+        <a href="tel:188" class="text-red-400 font-bold hover:underline ml-1">Ligue para o CVV (188)</a>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ========================================== -->
+  <!-- RODAPÉ SÓBRIO E DISCRETO                   -->
+  <!-- ========================================== -->
+  <footer class="w-full border-t border-graphite-border bg-[#090b0e] py-6 px-6 sm:px-8 text-xs text-slate-500 z-30">
+    <div class="max-w-6xl mx-auto flex flex-col sm:flex-row justify-between items-center gap-4">
+      <div>
+        <span class="font-bold text-slate-300">BET, CHEGA.</span> — A porta de saída das apostas.
+      </div>
+      <div class="flex gap-6 text-slate-400 text-[11px]">
+        <button onclick="openFamilyModal()" class="hover:text-lime transition-colors">Apoio a Familiares</button>
+        <button onclick="openEmergencyModal()" class="hover:text-red-400 transition-colors">Linhas de Crise</button>
+        <span class="text-slate-600">betchega.com.br • 2026</span>
+      </div>
+    </div>
+  </footer>
+
+  <!-- ========================================== -->
+  <!-- MODAL: AJUDA EM CRISE URGENTE (CVV 188)    -->
+  <!-- ========================================== -->
+  <div id="emergencyModal" class="fixed inset-0 z-50 bg-black/90 backdrop-blur-md hidden items-center justify-center p-4">
+    <div class="bg-[#141214] border border-red-900/60 rounded-2xl max-w-md w-full p-6 text-center relative shadow-2xl">
+      <button onclick="closeModal('emergencyModal')" class="absolute top-4 right-4 text-slate-400 hover:text-white p-2">✕</button>
+
+      <div class="w-12 h-12 rounded-full bg-red-950/60 border border-red-600 text-red-400 flex items-center justify-center mx-auto mb-4 font-bold text-xl">
+        !
+      </div>
+
+      <h3 class="font-display font-black text-2xl text-white mb-2">Apoio em Crise Urgente</h3>
+      <p class="text-slate-300 text-sm leading-relaxed mb-6">
+        Se você está com ideações de autolesão, sensação de sufoco insuportável ou desespero decorrente de perdas financeiras, procure acolhimento humano agora:
+      </p>
+
+      <div class="bg-[#0b0c0e] border border-graphite-border p-4 rounded-xl mb-6 text-left space-y-3">
+        <div>
+          <div class="text-xs text-slate-400 font-medium">Linha Gratuita, Confidencial e 24h:</div>
+          <div class="text-lg font-bold text-red-400 flex items-center justify-between mt-1">
+            <span>CVV — Ligue 188</span>
+            <a href="tel:188" class="text-xs bg-red-950 hover:bg-red-900 border border-red-800 text-red-200 px-3 py-1 rounded font-bold">Ligar 188</a>
+          </div>
+        </div>
+        <hr class="border-graphite-border">
+        <div>
+          <div class="text-xs text-slate-400 font-medium">Reuniões Gratuitas de Apoio:</div>
+          <div class="text-sm font-semibold text-slate-200">Jogadores Anônimos do Brasil (JA)</div>
+        </div>
+      </div>
+
+      <button onclick="closeModal('emergencyModal')" class="w-full bg-graphite hover:bg-graphite-hover border border-graphite-border text-slate-300 font-semibold py-3 rounded-lg text-xs transition-colors">
+        Voltar para a página segura
+      </button>
+    </div>
+  </div>
+
+  <!-- ========================================== -->
+  <!-- MODAL: TRILHA FAMILIAR                     -->
+  <!-- ========================================== -->
+  <div id="familyModal" class="fixed inset-0 z-50 bg-black/85 backdrop-blur-md hidden items-center justify-center p-4">
+    <div class="bg-[#11141b] border border-graphite-border rounded-2xl max-w-lg w-full p-6 text-left relative shadow-2xl">
+      <button onclick="closeModal('familyModal')" class="absolute top-4 right-4 text-slate-400 hover:text-white p-2">✕</button>
+
+      <span class="text-xs font-mono font-bold text-lime uppercase tracking-wider mb-2 inline-block">Para Esposas, Pais e Amigos</span>
+      <h3 class="font-display font-black text-2xl text-white mb-3">Como ajudar sem se destruir.</h3>
+      
+      <div class="space-y-3 text-sm text-slate-300 leading-relaxed mb-6">
+        <div class="bg-carbon p-3.5 rounded-lg border border-graphite-border">
+          <strong class="text-white block mb-1">1. Não cubra as dívidas de aposta:</strong>
+          Pagar as perdas retira a consequência e financia o próximo ciclo. A dor precisa ensinar a parar.
+        </div>
+        <div class="bg-carbon p-3.5 rounded-lg border border-graphite-border">
+          <strong class="text-white block mb-1">2. Proteja o patrimônio essencial da casa:</strong>
+          Altere senhas bancárias individuais e garanta o pagamento de alimentação e moradia.
+        </div>
+        <div class="bg-carbon p-3.5 rounded-lg border border-graphite-border">
+          <strong class="text-white block mb-1">3. Conduza com firmeza e sem agressão:</strong>
+          Diga: <em>"Eu te amo, mas não financio mais apostas. Vamos procurar apoio no BET, CHEGA. juntos."</em>
+        </div>
+      </div>
+
+      <button onclick="closeModal('familyModal')" class="w-full bg-lime hover:bg-lime-hover text-carbon font-display font-bold py-3 rounded-lg text-sm uppercase transition-colors">
+        Entendido. Guardar Orientações
+      </button>
+    </div>
+  </div>
+
+  <!-- ========================================== -->
+  <!-- MODAL: VITÓRIA NOTURNA                     -->
+  <!-- ========================================== -->
+  <div id="victoryModal" class="fixed inset-0 z-50 bg-black/90 backdrop-blur-md hidden items-center justify-center p-4">
+    <div class="bg-[#11141b] border border-lime/40 rounded-2xl max-w-md w-full p-8 text-center relative shadow-2xl">
+      <div class="w-14 h-14 rounded-full bg-[#132318] border border-lime text-lime flex items-center justify-center mx-auto mb-5 text-2xl font-black">
+        ,
+      </div>
+
+      <h3 class="font-display font-black text-2xl text-white mb-2">Primeira vitória garantida.</h3>
+      <p class="text-slate-300 text-sm leading-relaxed mb-6">
+        Você parou a sangria esta noite. O dinheiro não foi embora de novo.<br><br>
+        Durma com a cabeça limpa. Amanhã de manhã damos o próximo passo rumo à reconstrução.
+      </p>
+
+      <button onclick="quickExit()" class="w-full bg-lime hover:bg-lime-hover text-carbon font-display font-black py-3.5 rounded-xl uppercase tracking-wider text-sm transition-all mb-3">
+        Descansar Agora (Fechar)
+      </button>
+
+      <button onclick="closeModal('victoryModal'); goToScreen(1);" class="text-xs text-slate-500 hover:text-slate-300 transition-colors">
+        Voltar à página inicial
+      </button>
+    </div>
+  </div>
+
+  <!-- ========================================== -->
+  <!-- JAVASCRIPT: MÁQUINA DE ESTADOS DA JORNADA  -->
+  <!-- ========================================== -->
+  <script>
+    let currentScreen = 1;
+    let breathTimerInterval = null;
+
+    function goToScreen(screenNumber) {
+      for (let i = 1; i <= 4; i++) {
+        const el = document.getElementById(`screen${i}`);
+        if (el) {
+          el.classList.add('hidden');
+          el.classList.remove('flex');
+        }
+      }
+
+      const target = document.getElementById(`screen${screenNumber}`);
+      if (target) {
+        target.classList.remove('hidden');
+        target.classList.add('flex');
+        currentScreen = screenNumber;
+      }
+
+      if (screenNumber === 2) {
+        startBreathingCycle(30);
+      } else {
+        if (breathTimerInterval) clearInterval(breathTimerInterval);
+      }
+
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    function startBreathingCycle(secondsTotal) {
+      let secondsLeft = secondsTotal;
+      const display = document.getElementById('breathTimerDisplay');
+      const bar = document.getElementById('breathProgressBar');
+      const guideText = document.getElementById('breatheGuideText');
+
+      if (breathTimerInterval) clearInterval(breathTimerInterval);
+
+      function update() {
+        const sStr = secondsLeft < 10 ? "0" + secondsLeft : secondsLeft;
+        display.textContent = "00:" + sStr;
+
+        const pct = (secondsLeft / secondsTotal) * 100;
+        bar.style.width = `${pct}%`;
+
+        const cyclePosition = secondsLeft % 14;
+        if (cyclePosition > 10) {
+          guideText.textContent = "Puxe o ar bem fundo...";
+          guideText.className = "text-lime font-display font-bold text-xl sm:text-2xl mb-2 tracking-wide transition-all";
+        } else if (cyclePosition > 6) {
+          guideText.textContent = "Segure o ar com calma...";
+          guideText.className = "text-white font-display font-bold text-xl sm:text-2xl mb-2 tracking-wide transition-all";
+        } else {
+          guideText.textContent = "Solte o ar bem devagar...";
+          guideText.className = "text-slate-300 font-display font-bold text-xl sm:text-2xl mb-2 tracking-wide transition-all";
+        }
+
+        if (--secondsLeft < 0) {
+          clearInterval(breathTimerInterval);
+          setTimeout(() => {
+            goToScreen(3);
+          }, 600);
+        }
+      }
+
+      update();
+      breathTimerInterval = setInterval(update, 1000);
+    }
+
+    function selectIncident(type) {
+      sessionStorage.setItem('bet_incident_type', type);
+      goToScreen(4);
+    }
+
+    function finishProtectionNight() {
+      openModal('victoryModal');
+    }
+
+    function openModal(id) {
+      const modal = document.getElementById(id);
+      if (modal) {
+        modal.classList.remove('hidden');
+        modal.classList.add('flex');
+        document.body.style.overflow = 'hidden';
+      }
+    }
+
+    function closeModal(id) {
+      const modal = document.getElementById(id);
+      if (modal) {
+        modal.classList.add('hidden');
+        modal.classList.remove('flex');
+        document.body.style.overflow = 'auto';
+      }
+    }
+
+    function openEmergencyModal() {
+      openModal('emergencyModal');
+    }
+
+    function openFamilyModal() {
+      openModal('familyModal');
+    }
+
+    function quickExit() {
+      window.location.replace("https://www.google.com");
+    }
+
+    document.addEventListener('keydown', function(event) {
+      if (event.key === "Escape") {
+        const openModals = document.querySelectorAll('.fixed.flex');
+        if (openModals.length > 0) {
+          openModals.forEach(m => {
+            m.classList.add('hidden');
+            m.classList.remove('flex');
+          });
+          document.body.style.overflow = 'auto';
+        } else {
+          quickExit();
+        }
+      }
+    });
+
+    function handleImageFallback(imgEl) {
+      if (!imgEl.dataset.fallbackDone) {
+        imgEl.dataset.fallbackDone = "true";
+        imgEl.src = "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=900&q=80";
+      }
+    }
+  </script>
 </body>
 </html>
