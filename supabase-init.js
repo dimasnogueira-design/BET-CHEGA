@@ -72,7 +72,7 @@
     if (!ready || !client || !user) return;
     const { data, error } = await client
       .from('journey_states')
-      .select('id, stage, status, current_flow')
+      .select('id, journey_stage, active_flow, active_step, status')
       .eq('user_id', user.id)
       .limit(1)
       .maybeSingle();
@@ -80,71 +80,79 @@
     if (!data) {
       const { error: insertError } = await client.from('journey_states').insert({
         user_id: user.id,
-        stage: 'ver',
-        status: 'active',
-        current_flow: 'home'
+        journey_stage: 'ver',
+        active_flow: 'home',
+        active_step: 'entry',
+        status: 'active'
       });
       if (insertError) throw insertError;
     }
   }
 
-  async function recordFlow(flow, stage) {
-    saveLocal({ last_flow: flow, last_stage: stage });
+  async function recordFlow(flow, stage, step) {
+    saveLocal({ last_flow: flow, last_stage: stage, last_step: step });
     if (!ready || !client || !user) return;
 
-    const { data: current } = await client
+    const { data: current, error: readError } = await client
       .from('journey_states')
       .select('id')
       .eq('user_id', user.id)
       .limit(1)
       .maybeSingle();
 
+    if (readError) throw readError;
+
     if (current && current.id) {
-      await client.from('journey_states').update({
-        stage: stage,
+      const { error } = await client.from('journey_states').update({
+        journey_stage: stage,
+        active_flow: flow,
+        active_step: step,
         status: 'active',
-        current_flow: flow,
         updated_at: new Date().toISOString()
       }).eq('id', current.id);
+      if (error) throw error;
     } else {
-      await client.from('journey_states').insert({
+      const { error } = await client.from('journey_states').insert({
         user_id: user.id,
-        stage: stage,
-        status: 'active',
-        current_flow: flow
+        journey_stage: stage,
+        active_flow: flow,
+        active_step: step,
+        status: 'active'
       });
+      if (error) throw error;
     }
+  }
 
-    await client.from('checkins').insert({
-      user_id: user.id,
-      type: 'flow_start',
-      note: flow
+  function safeRecord(flow, stage, step) {
+    recordFlow(flow, stage, step).catch(function (error) {
+      saveLocal({ last_error: error && error.message ? error.message : 'persist_error' });
+      console.warn('[BET, CHEGA.] Não foi possível salvar este passo no Supabase.', error);
     });
   }
 
   function bindJourneyActions() {
     document.querySelectorAll('[data-impulse]').forEach(function (el) {
-      el.addEventListener('click', function () { recordFlow('impulso', 'decidir'); });
+      el.addEventListener('click', function () { safeRecord('impulso', 'decidir', 'pausa'); });
     });
 
     document.querySelectorAll('a[href="#parar"]').forEach(function (el) {
-      el.addEventListener('click', function () { recordFlow('quero_parar', 'decidir'); });
+      el.addEventListener('click', function () { safeRecord('quero_parar', 'decidir', 'entrada'); });
     });
 
     document.querySelectorAll('a[href="#autoexclusao"]').forEach(function (el) {
-      el.addEventListener('click', function () { recordFlow('autoexclusao', 'proteger'); });
+      el.addEventListener('click', function () { safeRecord('autoexclusao', 'proteger', 'entrada'); });
     });
 
     document.querySelectorAll('a[href="#espelho"]').forEach(function (el) {
-      el.addEventListener('click', function () { recordFlow('espelho', 'ver'); });
+      el.addEventListener('click', function () { safeRecord('espelho', 'ver', 'entrada'); });
     });
 
     document.querySelectorAll('a[href="#familia"]').forEach(function (el) {
-      el.addEventListener('click', function () { recordFlow('familia', 'ver'); });
+      el.addEventListener('click', function () { safeRecord('familia', 'ver', 'entrada'); });
     });
 
     document.querySelectorAll('a[href="#recaida"]').forEach(function (el) {
-      el.addEventListener('click', function () { recordFlow('recaida', 'atravessar'); });
+      el.addEventListener('click', function () { safeRecord('recaida', 'atravessar', 'entrada'); });
     });
   }
 
