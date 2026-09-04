@@ -14,24 +14,34 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Add Supabase bootstrap to the static page
+      - name: Add Supabase bootstrap and journey events to the static page
         shell: python
         run: |
           from pathlib import Path
 
           path = Path('index.html')
           text = path.read_text(encoding='utf-8')
-          marker = '<script src="/supabase-init.js" defer></script>'
+          markers = [
+              '<script src="/supabase-init.js" defer></script>',
+              '<script src="/journey-events.js" defer></script>'
+          ]
 
-          if marker not in text:
-              if '</head>' not in text:
-                  raise SystemExit('index.html sem fechamento </head>')
-              text = text.replace('</head>', f'{marker}\n</head>', 1)
+          if '</head>' not in text:
+              raise SystemExit('index.html sem fechamento </head>')
+
+          changed = False
+          for marker in markers:
+              if marker not in text:
+                  text = text.replace('</head>', f'{marker}\n</head>', 1)
+                  changed = True
+
+          if changed:
               path.write_text(text, encoding='utf-8')
+              print('Scripts de persistência conectados.')
           else:
-              print('Supabase bootstrap já conectado.')
+              print('Scripts de persistência já conectados.')
 
-      - name: Commit bootstrap when needed
+      - name: Commit scripts when needed
         shell: bash
         run: |
           if git diff --quiet -- index.html; then
@@ -41,5 +51,5 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add index.html
-          git commit -m "chore: conectar bootstrap do Supabase"
+          git commit -m "chore: conectar histórico de jornada"
           git push
