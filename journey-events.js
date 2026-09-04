@@ -29,7 +29,12 @@
       metadata: metadata || {}
     });
 
-    if (error) console.warn('[BET, CHEGA.] Evento não registrado.', error);
+    if (error) {
+      console.warn('[BET, CHEGA.] Evento não registrado.', error);
+      return;
+    }
+
+    console.info('[BET, CHEGA.] Evento registrado:', eventType, flow, stage, step);
   }
 
   function bind() {
@@ -63,17 +68,26 @@
           'Já transferi dinheiro.': 'dinheiro_transferido',
           'Não sei o que fazer.': 'nao_sei_o_que_fazer'
         };
-        recordEvent('impulse_response_selected', 'impulso', 'atravessar', map[text] || 'resposta_selecionada', { response: text });
+        recordEvent(
+          'impulse_response_selected',
+          'impulso',
+          'atravessar',
+          map[text] || 'resposta_selecionada'
+        );
       });
     });
 
     const timer = document.querySelector('.timer');
     if (timer && timer.dataset.eventObserver !== 'true') {
       timer.dataset.eventObserver = 'true';
+      let completed = false;
       const observer = new MutationObserver(function () {
-        if (timer.textContent.trim() === '00:00') {
+        if (!completed && timer.textContent.trim() === '00:00') {
+          completed = true;
           recordEvent('impulse_pause_completed', 'impulso', 'atravessar', 'pausa_concluida');
-          observer.disconnect();
+          window.setTimeout(function () {
+            completed = false;
+          }, 500);
         }
       });
       observer.observe(timer, { childList: true, characterData: true, subtree: true });
@@ -85,6 +99,8 @@
     if (getApi()) return;
     window.setTimeout(waitForSupabase, 250);
   }
+
+  console.info('[BET, CHEGA.] journey-events.js carregado.');
 
   if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', waitForSupabase);
