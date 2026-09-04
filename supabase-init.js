@@ -72,7 +72,7 @@
     if (!ready || !client || !user) return;
     const { data, error } = await client
       .from('journey_states')
-      .select('id, journey_stage, active_flow, active_step, status')
+      .select('id, current_stage, current_flow, current_step')
       .eq('user_id', user.id)
       .limit(1)
       .maybeSingle();
@@ -80,10 +80,9 @@
     if (!data) {
       const { error: insertError } = await client.from('journey_states').insert({
         user_id: user.id,
-        journey_stage: 'ver',
-        active_flow: 'home',
-        active_step: 'entry',
-        status: 'active'
+        current_stage: 'ver',
+        current_flow: 'home',
+        current_step: 'entry'
       });
       if (insertError) throw insertError;
     }
@@ -104,20 +103,18 @@
 
     if (current && current.id) {
       const { error } = await client.from('journey_states').update({
-        journey_stage: stage,
-        active_flow: flow,
-        active_step: step,
-        status: 'active',
+        current_stage: stage,
+        current_flow: flow,
+        current_step: step,
         updated_at: new Date().toISOString()
       }).eq('id', current.id);
       if (error) throw error;
     } else {
       const { error } = await client.from('journey_states').insert({
         user_id: user.id,
-        journey_stage: stage,
-        active_flow: flow,
-        active_step: step,
-        status: 'active'
+        current_stage: stage,
+        current_flow: flow,
+        current_step: step
       });
       if (error) throw error;
     }
