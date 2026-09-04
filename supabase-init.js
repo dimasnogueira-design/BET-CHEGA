@@ -127,6 +127,17 @@
     });
   }
 
+  function impulseStepFromText(text) {
+    const steps = {
+      'Perdi dinheiro.': 'perdi_dinheiro',
+      'Estou querendo recuperar.': 'querendo_recuperar',
+      'Estou quase apostando.': 'quase_apostando',
+      'Já transferi dinheiro.': 'dinheiro_transferido',
+      'Não sei o que fazer.': 'nao_sei_o_que_fazer'
+    };
+    return steps[text] || 'resposta_selecionada';
+  }
+
   function bindJourneyActions() {
     document.querySelectorAll('[data-impulse]').forEach(function (el) {
       el.addEventListener('click', function () { safeRecord('impulso', 'decidir', 'pausa'); });
@@ -150,6 +161,32 @@
 
     document.querySelectorAll('a[href="#recaida"]').forEach(function (el) {
       el.addEventListener('click', function () { safeRecord('recaida', 'atravessar', 'entrada'); });
+    });
+
+    const impulseStart = document.querySelector('[data-start]');
+    if (impulseStart) {
+      impulseStart.addEventListener('click', function () {
+        safeRecord('impulso', 'decidir', 'pausa_iniciada');
+      });
+    }
+
+    const impulseTimer = document.querySelector('.timer');
+    const impulseStatus = document.querySelector('.status');
+    if (impulseTimer && impulseStatus) {
+      const observer = new MutationObserver(function () {
+        if (impulseTimer.textContent.trim() === '00:00') {
+          safeRecord('impulso', 'atravessar', 'pausa_concluida');
+          observer.disconnect();
+        }
+      });
+      observer.observe(impulseTimer, { childList: true, characterData: true, subtree: true });
+    }
+
+    document.querySelectorAll('.option').forEach(function (option) {
+      option.addEventListener('click', function () {
+        const text = option.textContent.trim();
+        safeRecord('impulso', 'atravessar', impulseStepFromText(text));
+      });
     });
   }
 
